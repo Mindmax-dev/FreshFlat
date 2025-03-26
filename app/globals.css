@@ -1,6 +1,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --mainColor: green;
+  --borderColor: #064a00;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,4 +41,13 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+button {
+  background: var(--mainColor);
+  color: white;
+  padding: 0.25rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border-color: var(--borderColor);
 }
