@@ -1,7 +1,7 @@
-'use client';
-import signUpUser from '@/controller/user';
-import Link from 'next/link';
-import { useState } from 'react';
+"use client";
+import { signUpUserController } from "@/controller/user";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function Login() {
   const [signInWasSuccessful, setSignInWasSuccessful] = useState(false);
@@ -13,13 +13,17 @@ export default function Login() {
     const password = event.target.password.value;
     const username = event.target.username.value;
 
-    const { data, error } = await signUpUser(email, password, username);
+    const { data, error } = await signUpUserController(
+      email,
+      password,
+      username
+    );
 
     if (error) {
-      console.error('Error signing up:', error.message);
+      console.error("Error signing up:", error.message);
       setSignInWasSuccessful(false);
     } else {
-      console.log('Sign up successful:', data);
+      console.log("Sign up successful:", data);
       setSignInWasSuccessful(true);
     }
   };
