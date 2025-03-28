@@ -21,7 +21,7 @@ export default function Login() {
     event.preventDefault();
     const email = event.target.elements[0].value;
     const password = event.target.elements[1].value;
-    const { user, session, errro } = await signInUserController(
+    const { user, session, error } = await signInUserController(
       email,
       password
     );
