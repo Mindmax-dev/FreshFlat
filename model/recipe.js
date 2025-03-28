@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/server';
 import OpenAI from 'openai';
 
 export async function generateRecipeWithAi(ingredients, difficulty) {
@@ -83,10 +83,7 @@ export async function generateRecipeWithAi(ingredients, difficulty) {
               description: 'The cooking time in minutes.',
             },
             instructions: {
-              type: 'array',
-              items: {
-                type: 'string',
-              },
+              type: 'string',
               description:
                 'A step-by-step list of instructions for preparing the recipe.',
             },
@@ -135,4 +132,65 @@ export async function getAllRecipesOfFlatWithFilters(
     return null;
   }
   return data;
+}
+
+export async function saveRecipeToDatabase(
+  title,
+  instructions,
+  preparation_time,
+  cooking_time,
+  ingredients
+) {
+  const supabase = await createClient();
+
+  const user = await supabase.auth.getUser();
+  let userId = null;
+  if (!user.error) {
+    console.error('Error fetching user:', user.error);
+    userId = user.data.user.id;
+  }
+  const flatOfUser = await supabase
+    .from('flats_have_users')
+    .select()
+    .eq('user', userId);
+
+  const saveRecipe = await supabase
+    .from('recipes')
+    .insert([
+      {
+        title: title,
+        instructions: instructions,
+        preparation_time: preparation_time,
+        cooking_time: cooking_time,
+        created_by: userId,
+        flat: flatOfUser.data[0].flat,
+      },
+    ])
+    .select();
+
+  if (saveRecipe.error) {
+    console.error('Error saving recipe:', error);
+    return null;
+  }
+
+  console.log('Recipe saved:', saveRecipe);
+
+  const ingredientsData = ingredients.map((ingredient) => ({
+    recipe: saveRecipe.data[0].id,
+    ingredient: ingredient.id,
+    amount: ingredient.amount,
+    unit: ingredient.unit,
+  }));
+
+  const saveIngredients = await supabase
+    .from('recipes_have_ingredients')
+    .insert(ingredientsData);
+
+  if (saveIngredients.error) {
+    console.error('Error saving ingredients:', saveIngredients.error);
+    return null;
+  }
+
+  // return the recipe id
+  return saveRecipe.data[0].id;
 }
