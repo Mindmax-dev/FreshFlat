@@ -1,5 +1,5 @@
 'use client';
-import { createClient } from '@/utils/supabase/client';
+import signUpUser from '@/controller/user';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -8,21 +8,12 @@ export default function Login() {
 
   const signUp = async (event) => {
     event.preventDefault();
-    const supabase = createClient();
 
     const email = event.target.email.value;
     const password = event.target.password.value;
     const username = event.target.username.value;
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: username,
-        },
-      },
-    });
+    const { data, error } = await signUpUser(email, password, username);
 
     if (error) {
       console.error('Error signing up:', error.message);
