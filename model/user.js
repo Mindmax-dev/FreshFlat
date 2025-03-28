@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/client';
 
-export default async function signUpUser(email, password, username) {
+export async function signUpUser(email, password, username) {
   const supabase = createClient();
 
   const { data, error } = await supabase.auth.signUp({
