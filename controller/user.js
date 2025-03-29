@@ -1,4 +1,4 @@
-import signUpUser, { signInUser } from "@/model/user";
+import { signUpUser, signInUser } from "@/model/user";
 
 export async function signUpUserController(email, password, username) {
   return await signUpUser(email, password, username);
