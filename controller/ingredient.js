@@ -1,5 +1,5 @@
 import { getAllIngredients } from "@/model/ingredient";
 
-export function getIngredients() {
-  return "controller.getIngredients()." + getAllIngredients();
+export async function getIngredients() {
+  return await getAllIngredients();
 }
