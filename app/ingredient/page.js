@@ -1,16 +1,14 @@
-import { getIngredients } from "@/controller/ingredient";
-import { getAllUserIngredients } from "@/controller/ingredient";
-import { signOutUser } from "@/model/user";
+import { getAllUserIngredients, getIngredients } from '@/controller/ingredient';
 
 export default async function Ingredient() {
   const data = await getIngredients();
   const [name, userData] = await getAllUserIngredients();
 
-  const elements = data?.map((d) => <li key={d.id}>{d.name}</li>);
+  const elements = data?.map((d) => <li key={d.name}>{d.name}</li>);
 
   const userElements = userData?.map((d) => (
     <li key={d.ingredient}>
-      x{d.amount} {d.unit ? ` ${d.unit} ` : " "}
+      x{d.amount} {d.unit ? ` ${d.unit} ` : ' '}
       {d.ingredients.name}
     </li>
   ));
@@ -28,7 +26,7 @@ export default async function Ingredient() {
 
       {userData && (
         <>
-          <h2>{name}'s ingredients:</h2>
+          <h2>{name}&apos;s ingredients:</h2>
           <ul>{userElements}</ul>
         </>
       )}

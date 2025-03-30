@@ -15,6 +15,7 @@ export async function signUpUser(email, password, username) {
 
   return { data, error };
 }
+
 export async function signInUser(email, password) {
   const supabase = createClient();
 
