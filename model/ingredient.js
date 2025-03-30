@@ -12,3 +12,11 @@ export async function getAllIngredients() {
 
   return data;
 }
+
+export async function getAllUsersIngredients() {
+  const supabase = await createClient();
+  const user = await supabase.auth.getUser();
+  console.log(user);
+
+  return user;
+}
