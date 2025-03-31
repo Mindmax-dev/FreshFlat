@@ -51,3 +51,30 @@ button {
   border-radius: 0.5rem;
   border-color: var(--borderColor);
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 1rem;
+  text-align: left;
+}
+
+th, td {
+  padding: 0.75rem;
+  border: 1px solid var(--borderColor);
+}
+
+th {
+  background-color: var(--mainColor);
+  color: white;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 128, 0, 0.1); /* Light green tint */
+}
+
+tr:hover {
+  background-color: rgba(0, 128, 0, 0.2); /* Slightly darker green tint */
+}
