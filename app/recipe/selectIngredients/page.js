@@ -1,42 +1,30 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function SelectIngredients() {
-  const [ingredients, setIngredients] = useState([
-    {
-      quantity: 2,
-      unit: 'cups',
-      name: 'Flour',
-      created_by: 'John Doe',
-      expiry_date: '2023-10-01',
-      selected: false,
-    },
-    {
-      quantity: 1,
-      unit: 'tsp',
-      name: 'Salt',
-      created_by: 'Jane Smith',
-      expiry_date: '2023-10-02',
-      selected: false,
-    },
-    {
-      quantity: 3,
-      unit: 'tbsp',
-      name: 'Sugar',
-      created_by: 'John Doe',
-      expiry_date: '2023-10-03',
-      selected: false,
-    },
-    {
-      quantity: 1,
-      unit: 'cup',
-      name: 'Milk',
-      created_by: 'Jane Smith',
-      expiry_date: '2023-10-04',
-      selected: false,
-    },
-  ]);
+  const [ingredients, setIngredients] = useState([]);
+  const [isLoadingIngredients, setIsLoadingIngredients] = useState(true);
+
+  useEffect(() => {
+    // ? Format:
+    // {
+    //   quantity: 2,
+    //   unit: 'cups',
+    //   name: 'Flour',
+    //   created_by: 'John Doe',
+    //   expiry_date: '2023-10-01',
+    //   selected: true,
+    // },
+    const getUsersAndFlatsPublicIngredients = async () => {
+      // # 1. Get the ingredients of the user and the public ingredients of the flat
+      setIngredients([]);
+      setIsLoadingIngredients(false);
+    };
+
+    getUsersAndFlatsPublicIngredients();
+  }, []);
+
   const [difficulty, setDifficulty] = useState('easy');
   const router = useRouter();
 
@@ -80,42 +68,101 @@ export default function SelectIngredients() {
     <div>
       <h1>Create Recipe</h1>
       <p>Choose your ingredients</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Quantity</th>
-            <th>Unit</th>
-            <th>Name</th>
-            <th>Owner</th>
-            <th>Date</th>
-            <th>
-              <input
-                type="checkbox"
-                onChange={handleMasterCheckboxChange}
-                checked={ingredients.every((ingredient) => ingredient.selected)}
-              />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {ingredients.map((ingredient, index) => (
-            <tr key={ingredient.name + index}>
-              <td>{ingredient.quantity}</td>
-              <td>{ingredient.unit}</td>
-              <td>{ingredient.name}</td>
-              <td>{ingredient.created_by}</td>
-              <td>{ingredient.expiry_date}</td>
-              <td>
+      {isLoadingIngredients ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Name</th>
+              <th>Owner</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...Array(5)].map((_, index) => (
+              <tr key={index}>
+                <td>
+                  <div
+                    className="skeleton"
+                    style={{ width: '50px', height: '20px' }}
+                  ></div>
+                </td>
+                <td>
+                  <div
+                    className="skeleton"
+                    style={{ width: '50px', height: '20px' }}
+                  ></div>
+                </td>
+                <td>
+                  <div
+                    className="skeleton"
+                    style={{ width: '100px', height: '20px' }}
+                  ></div>
+                </td>
+                <td>
+                  <div
+                    className="skeleton"
+                    style={{ width: '80px', height: '20px' }}
+                  ></div>
+                </td>
+                <td>
+                  <div
+                    className="skeleton"
+                    style={{ width: '80px', height: '20px' }}
+                  ></div>
+                </td>
+                <td>
+                  <div
+                    className="skeleton"
+                    style={{ width: '20px', height: '20px' }}
+                  ></div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Name</th>
+              <th>Owner</th>
+              <th>Date</th>
+              <th>
                 <input
                   type="checkbox"
-                  checked={ingredient.selected}
-                  onChange={() => handleCheckboxChange(index)}
+                  onChange={handleMasterCheckboxChange}
+                  checked={ingredients.every(
+                    (ingredient) => ingredient.selected
+                  )}
                 />
-              </td>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {ingredients.map((ingredient, index) => (
+              <tr key={ingredient.name + index}>
+                <td>{ingredient.quantity}</td>
+                <td>{ingredient.unit}</td>
+                <td>{ingredient.name}</td>
+                <td>{ingredient.created_by}</td>
+                <td>{ingredient.expiry_date}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={ingredient.selected}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       <div style={{ marginTop: '20px' }}>
         <label htmlFor="difficulty">Difficulty: </label>
         <select
