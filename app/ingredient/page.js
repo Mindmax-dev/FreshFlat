@@ -2,6 +2,7 @@ import {
   getAllUserIngredients,
   getIngredients,
   getRecipeIngredients,
+  getFlatIngredients,
 } from '@/controller/ingredient';
 
 export default async function Ingredient() {
@@ -10,6 +11,7 @@ export default async function Ingredient() {
       <AllIngredients></AllIngredients>
       <UserIngredients></UserIngredients>
       <RecipeIngredients></RecipeIngredients>
+      <FlatsIngredients></FlatsIngredients>
     </div>
   );
 }
@@ -61,6 +63,25 @@ async function RecipeIngredients() {
     ingredients && (
       <>
         <h2>{name} ingredients:</h2>
+        <ul>{elements}</ul>
+      </>
+    )
+  );
+}
+
+async function FlatsIngredients() {
+  const data = await getFlatIngredients();
+
+  const elements = data.map((data) => (
+    <li key={data.ingredient}>
+      {data.amount} {data.unit} {data.ingredient}
+    </li>
+  ));
+
+  return (
+    data && (
+      <>
+        <h2>Current Users Flat Ingredients</h2>
         <ul>{elements}</ul>
       </>
     )

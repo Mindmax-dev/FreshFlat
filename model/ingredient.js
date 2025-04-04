@@ -73,8 +73,39 @@ export function getUsersIngredients() {
 /**
  * Get all ingredients for a the current users flat.
  */
-export function getFlatsIngredients() {
-  return 'Hi from model/ingedient.getFlatsIngredients';
+export async function getFlatsIngredients() {
+  const supabase = await createClient();
+  const user = await supabase.auth.getUser();
+
+  if (!user.data.user) {
+    console.log('No user logged in.');
+    return null;
+  }
+
+  // need to combine these into one query
+
+  // get flat if of current user
+  const flatID = await supabase
+    .from('flats_have_users')
+    .select('flat')
+    .eq('user', user.data.user.id);
+
+  // get users in current users flat
+  const users = await supabase
+    .from('flats_have_users')
+    .select('user')
+    .eq('flat', flatID.data[0].flat);
+
+  // get ingredients for each user in current users flat
+  const ingredients = await supabase
+    .from('users_have_ingredients')
+    .select('ingredient, ingredients(name), expiry_date, amount, unit')
+    .in(
+      'user',
+      users.data.map((user) => user.user)
+    );
+
+  return ingredients.data;
 }
 
 /**
