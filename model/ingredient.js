@@ -82,7 +82,7 @@ export async function getFlatsIngredients() {
     return null;
   }
 
-  // need to combine these into one query
+  // need to combine these into one query sometime
 
   // get flat if of current user
   const flatID = await supabase
