@@ -1,8 +1,13 @@
-import { getAllUserIngredients, getIngredients } from '@/controller/ingredient';
+import {
+  getAllUserIngredients,
+  getIngredients,
+  getRecipeIngredients,
+} from '@/controller/ingredient';
 
 export default async function Ingredient() {
   const data = await getIngredients();
   const [name, userData] = await getAllUserIngredients();
+  const recipeIngredients = await getRecipeIngredients();
 
   const elements = data?.map((d) => <li key={d.name}>{d.name}</li>);
 
@@ -30,6 +35,7 @@ export default async function Ingredient() {
           <ul>{userElements}</ul>
         </>
       )}
+      <span>{recipeIngredients}</span>
     </div>
   );
 }

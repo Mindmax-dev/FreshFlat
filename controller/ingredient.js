@@ -1,4 +1,8 @@
-import { getAllIngredients, getAllUsersIngredients } from '@/model/ingredient';
+import {
+  getAllIngredients,
+  getAllUsersIngredients,
+  getRecipesIngredients,
+} from '@/model/ingredient';
 
 export async function getIngredients() {
   return await getAllIngredients();
@@ -6,4 +10,8 @@ export async function getIngredients() {
 
 export async function getAllUserIngredients() {
   return await getAllUsersIngredients();
+}
+
+export async function getRecipeIngredients() {
+  return await getRecipesIngredients();
 }

@@ -41,7 +41,8 @@ export async function getAllUsersIngredients() {
  * @param {string} recipeID ID of recipe
  * @returns
  */
-export function getRecipesIngredients(recipeID) {
+export async function getRecipesIngredients(recipeID) {
+  // const supabase = await createClient();
   return 'Hi from model/ingredient.getRecipesIngredients';
 }
 
