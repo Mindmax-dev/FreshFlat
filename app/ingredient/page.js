@@ -7,7 +7,7 @@ import {
 export default async function Ingredient() {
   const data = await getIngredients();
   const [name, userData] = await getAllUserIngredients();
-  const recipeIngredients = await getRecipeIngredients();
+  const [recipeName, recipeIngredients] = await getRecipeIngredients(7);
 
   const elements = data?.map((d) => <li key={d.name}>{d.name}</li>);
 
@@ -15,6 +15,12 @@ export default async function Ingredient() {
     <li key={d.ingredient}>
       x{d.amount} {d.unit ? ` ${d.unit} ` : ' '}
       {d.ingredients.name}
+    </li>
+  ));
+
+  const recipeIngredientElements = recipeIngredients.map((ing) => (
+    <li key={ing.ingredient}>
+      {ing.amount} {ing.unit} {ing.ingredient}
     </li>
   ));
 
@@ -35,7 +41,12 @@ export default async function Ingredient() {
           <ul>{userElements}</ul>
         </>
       )}
-      <span>{recipeIngredients}</span>
+      {recipeIngredients && (
+        <>
+          <h2>{recipeName} ingredients:</h2>
+          <ul>{recipeIngredientElements}</ul>
+        </>
+      )}
     </div>
   );
 }

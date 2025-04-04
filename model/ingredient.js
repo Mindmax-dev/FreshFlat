@@ -42,8 +42,24 @@ export async function getAllUsersIngredients() {
  * @returns
  */
 export async function getRecipesIngredients(recipeID) {
-  // const supabase = await createClient();
-  return 'Hi from model/ingredient.getRecipesIngredients';
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('recipes_have_ingredients')
+    .select('ingredient, amount, unit')
+    .eq('recipe', recipeID);
+
+  if (error) {
+    console.error('Error fetching ingredients:', error);
+    return null;
+  }
+
+  const recipeName = await supabase
+    .from('recipes')
+    .select('title')
+    .eq('id', recipeID);
+
+  return [recipeName.data[0].title, data];
 }
 
 // maybe redundant

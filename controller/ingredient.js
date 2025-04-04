@@ -12,6 +12,6 @@ export async function getAllUserIngredients() {
   return await getAllUsersIngredients();
 }
 
-export async function getRecipeIngredients() {
-  return await getRecipesIngredients();
+export async function getRecipeIngredients(recipeID) {
+  return await getRecipesIngredients(recipeID);
 }
