@@ -5,54 +5,36 @@ import { useEffect, useState } from 'react';
 
 export default function Account() {
   const router = useRouter();
-  const [sessionInfo, setSessionInfo] = useState(null);
+  const [username, setUsername] = useState('');
   const [editing, setEditing] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const setSessionInfoState = async () => {
       const supabase = createClient();
       const user = await supabase.auth.getUser();
       console.log(user);
-      setSessionInfo(user);
+      setUsername(user.data.user.user_metadata.full_name);
     };
     setSessionInfoState();
   }, []);
-  const updateUsername = async (newUsername) => {
+
+  const handleSave = () => {
     const supabase = createClient();
-    const { data, error } = await supabase.auth.updateUser({
-      data: { user_metadata: { username: newUsername } },
+    const { data, error } = supabase.auth.updateUser({
+      data: { user_metadata: { full_name: username } },
     });
     if (error) {
       console.error('Error updating username:', error);
-      setError(error.message);
     } else {
-      console.log('Username updated successfully:', data);
-      setSessionInfo((prev) => ({
-        ...prev,
-        user: {
-          ...prev.user,
-          user_metadata: { ...prev.user.user_metadata, username: newUsername },
-        },
-      }));
+      console.log('Username updated successfully:');
     }
-  };
-  const handleSave = () => {
-    console.log('Save button clicked with username:', username);
-    const supabase = createClient();
     setEditing(false);
   };
-  const [username, setUsername] = useState('');
-
-  useEffect(() => {
-    if (sessionInfo) {
-      setUsername(sessionInfo.user?.user_metadata?.username || '');
-    }
-  }, [sessionInfo]);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
+
   return (
     <>
       <h1>Account</h1>
@@ -73,7 +55,7 @@ export default function Account() {
         <button onClick={handleSave}>Save</button>
       ) : (
         <button onClick={() => setEditing(true)}>Edit</button>
-      )}{' '}
+      )}
     </>
   );
 }
