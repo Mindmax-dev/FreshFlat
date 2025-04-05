@@ -1,9 +1,9 @@
-"use client";
-import { signInUserController } from "@/controller/user";
-import { createClient } from "@/utils/supabase/client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+'use client';
+import { signInUserController } from '@/controller/user';
+import { createClient } from '@/utils/supabase/client';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function Login() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function Login() {
     if (error) {
       alert(error.message);
     } else {
-      router.push("/");
+      router.push('/');
     }
   };
 
@@ -52,7 +52,7 @@ export default function Login() {
         Version 1: Do not have an account yet? Sign Up!
       </Link>
       <br></br>
-      <button onClick={() => router.push("/auth/signup")}>
+      <button onClick={() => router.push('/auth/signup')}>
         Version 2: Do not have an account yet? Sign Up!
       </button>
     </div>

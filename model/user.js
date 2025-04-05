@@ -27,26 +27,63 @@ export async function signInUser(email, password) {
 }
 
 export async function signOutUser() {
-  // Sign out the current user
-  // This functionality is currently on the main page
+  const supabase = createClient();
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error('Error signing out:', error);
+    return null;
+  }
+  return true;
 }
 
 export async function getUser() {
-  // Get the current user
-  // This functionality is currently used in the "useEffect" hook in the login page
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
+  return data.user;
 }
 
 export async function deleteUser() {
-  // Delete the current user
-  // This functionality is currently not used
+  // Needs to be handled by admin client
+  const supabase = createClient();
+  const { user } = await supabase.auth.getUser();
+  if (!user) {
+    console.error('No user found to delete');
+    return null;
+  }
+  const { data, error } = await supabase.auth.admin.deleteUser();
+
+  if (error) {
+    console.error('Error deleting user:', error);
+    return null;
+  }
+  return data;
 }
 
 export async function updateUser() {
-  // Update the current user
-  // This functionality is currently not used
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      full_name: 'New Name',
+    },
+  });
+  if (error) {
+    console.error('Error updating user:', error);
+    return null;
+  }
+  return data.user;
 }
 
-export async function resetPassword() {
-  // Send a password reset email
-  // This functionality is currently not used
+export async function resetPassword(email) {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+  if (error) {
+    console.error('Error sending password reset email:', error);
+    return null;
+  }
+  return data;
 }
