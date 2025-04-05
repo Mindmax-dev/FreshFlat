@@ -85,27 +85,42 @@ export async function getFlatsIngredients() {
   // need to combine these into one query sometime
 
   // get flat if of current user
-  const flatID = await supabase
+  const { data: data1, error: error1 } = await supabase
     .from('flats_have_users')
     .select('flat')
     .eq('user', user.data.user.id);
 
+  if (error1) {
+    console.error('Error fetching ingredients: ', error1);
+    return null;
+  }
+
   // get users in current users flat
-  const users = await supabase
+  const { data: data2, error: error2 } = await supabase
     .from('flats_have_users')
     .select('user')
-    .eq('flat', flatID.data[0].flat);
+    .eq('flat', data1[0].flat);
+
+  if (error2) {
+    console.error('Error fetching ingredients: ', error2);
+    return null;
+  }
 
   // get ingredients for each user in current users flat
-  const ingredients = await supabase
+  const { data: data3, error: error3 } = await supabase
     .from('users_have_ingredients')
     .select('ingredient, ingredients(name), expiry_date, amount, unit')
     .in(
       'user',
-      users.data.map((user) => user.user)
+      data2.map((user) => user.user)
     );
 
-  return ingredients.data;
+  if (error3) {
+    console.error('Error fetching ingredients: ', error3);
+    return null;
+  }
+
+  return data3;
 }
 
 /**
