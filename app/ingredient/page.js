@@ -35,7 +35,7 @@ async function UserIngredients() {
 
   const elements = data?.map((d) => (
     <li key={d.ingredient}>
-      x{d.amount} {d.unit ? ` ${d.unit} ` : ' '}
+      {d.amount} {d.unit ? ` ${d.unit} ` : ' '}
       {d.ingredients.name}
     </li>
   ));

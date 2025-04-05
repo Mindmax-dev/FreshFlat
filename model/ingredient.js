@@ -97,6 +97,8 @@ export async function getFlatsIngredients() {
     .eq('flat', flatID.data[0].flat);
 
   // get ingredients for each user in current users flat
+  // ! We only want to have the public ingredients of the other users in the flat. So needs
+  // ! handling of attribute: is_public
   const ingredients = await supabase
     .from('users_have_ingredients')
     .select('ingredient, ingredients(name), expiry_date, amount, unit')
