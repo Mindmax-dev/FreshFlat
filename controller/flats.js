@@ -1,67 +1,63 @@
 // controller/flats.js
-const { createFlat, getFlats, getFlatById, updateFlat, deleteFlat } = require("../model/flat");
+const { createFlat, getFlats, getFlatById, updateFlat, deleteFlat } = require('@/model/flat');
 
 export async function createFlatController(req, res) {
     try {
-        const { name, adminId } = req.body;
+        const { name, adminId } = req.json();
         const { flat, error } = await createFlat(name, adminId);
         if (error) {
-            return res.status(400).json({ error: error.message });
+            return new Response(JSON.stringify({ error: error.message }), { status: 400 });
         }
-        res.status(201).json(flat);
+        return new Response(JSON.stringify(flat), { status: 201 });
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while creating the flat' });
+        return new Response(JSON.stringify({ error: 'An error occurred while creating the flat' }), { status: 500 });
     }
 }
-
 export async function getFlatsController(req, res) {
     try {
         const { flats, error } = await getFlats();
         if (error) {
-            return res.status(500).json({ error: error.message });
+            return new Response(JSON.stringify({ error: error.message }), { status: 400 });
         }
-        res.status(200).json(flats);
+        return new Response(JSON.stringify(flats), { status: 200 });
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while fetching flats' });
+        return new Response(JSON.stringify({ error: 'An error occurred while fetching flats' }), { status: 500 });
     }
 }
-
 export async function getFlatByIdController(req, res) {
     try {
-        const flatId = parseInt(req.params.id);
-        const { flat, error } = await getFlatById(flatId);
-        if (error || flat.length === 0) {
-            return res.status(404).json({ error: 'Flat not found' });
+        const { id } = req.params;
+        const { flat, error } = await getFlatById(id);
+        if (error) {
+            return new Response(JSON.stringify({ error: error.message }), { status: 400 });
         }
-        res.status(200).json(flat);
+        return new Response(JSON.stringify(flat), { status: 200 });
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while fetching the flat' });
+        return new Response(JSON.stringify({ error: 'An error occurred while fetching the flat' }), { status: 500 });
     }
 }
-
 export async function updateFlatController(req, res) {
     try {
-        const flatId = parseInt(req.params.id);
-        const flatData = req.body;
-        const { updatedFlat, error } = await updateFlat(flatId, flatData);
-        if (error || updatedFlat.length === 0) {
-            return res.status(404).json({ error: 'Flat not found' });
+        const { id } = req.params;
+        const updateData = req.json();
+        const { updatedFlat, error } = await updateFlat(id, updateData);
+        if (error) {
+            return new Response(JSON.stringify({ error: error.message }), { status: 400 });
         }
-        res.status(200).json(updatedFlat);
+        return new Response(JSON.stringify(updatedFlat), { status: 200 });
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while updating the flat' });
+        return new Response(JSON.stringify({ error: 'An error occurred while updating the flat' }), { status: 500 });
     }
 }
-
 export async function deleteFlatController(req, res) {
     try {
-        const flatId = parseInt(req.params.id);
-        const { error } = await deleteFlat(flatId);
+        const { id } = req.params;
+        const { error } = await deleteFlat(id);
         if (error) {
-            return res.status(400).json({ error: error.message });
+            return new Response(JSON.stringify({ error: error.message }), { status: 400 });
         }
-        res.status(204).end();
+        return new Response(JSON.stringify({ message: 'Flat deleted successfully' }), { status: 200 });
     } catch (error) {
-        res.status(500).json({ error: 'An error occurred while deleting the flat' });
+        return new Response(JSON.stringify({ error: 'An error occurred while deleting the flat' }), { status: 500 });
     }
 }
