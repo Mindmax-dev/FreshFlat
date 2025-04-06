@@ -68,6 +68,7 @@ export default function Account() {
       ) : (
         <button onClick={() => setEditing(true)}>Edit</button>
       )}
+      <button onClick={() => handlePasswordReset(username)}>Reset Password</button>
     </>
   );
 }
