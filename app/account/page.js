@@ -1,10 +1,8 @@
 'use client';
 import { createClient } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Account() {
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [editing, setEditing] = useState(false);
 
@@ -20,7 +18,7 @@ export default function Account() {
 
   const handleSave = () => {
     const supabase = createClient();
-    const { data, error } = supabase.auth.updateUser({
+    const { error } = supabase.auth.updateUser({
       data: { user_metadata: { full_name: username } },
     });
     if (error) {
