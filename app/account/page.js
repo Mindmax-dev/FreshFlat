@@ -35,6 +35,18 @@ export default function Account() {
     setUsername(e.target.value);
   };
 
+  const handlePasswordReset = async (email) => {
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://example.com/update-password',
+    });
+    if (error) {
+      console.error('Error resetting password:', error);
+    } else {
+      console.log('Password reset email sent');
+    }
+  };
+
   return (
     <>
       <h1>Account</h1>
