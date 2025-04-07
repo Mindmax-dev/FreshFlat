@@ -9,8 +9,6 @@ import {
 } from '@/controller/ingredient';
 
 export default async function Ingredient() {
-  console.log(await deleteUsersIngredient('potato', '2025-02-26'));
-
   await updateUserIngredient(
     'sponge',
     Math.floor(Math.random() * 100),
