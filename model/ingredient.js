@@ -101,7 +101,7 @@ export async function getFlatsIngredients() {
   // get ingredients for each user in current users flat
   const { data: data3, error: error3 } = await supabase
     .from('users_have_ingredients')
-    .select('ingredient, ingredients(name), expiry_date, amount, unit')
+    .select('ingredient, expiry_date, amount, unit, user')
     .in(
       'user',
       data2.map((user) => user.user)
@@ -202,6 +202,12 @@ export function deleteUserIngredient(ingredient) {
   return 'Hi from model/ingredient.deleteUserIngredient';
 }
 
-export function setQuantityOfUserIngredient(ingredient, quantity, unit = null) {
+export async function updateUsersIngredient(
+  ingredient,
+  quantity,
+  unit,
+  expiryDate,
+  isPublic
+) {
   return 'Hi from model/ingredient.setQuantityOfUserIngredient';
 }

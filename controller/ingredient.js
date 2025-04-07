@@ -4,6 +4,7 @@ import {
   getRecipesIngredients,
   getFlatsIngredients,
   addNewUserIngredient,
+  updateUsersIngredient,
 } from '@/model/ingredient';
 
 export async function getIngredients() {
@@ -30,6 +31,22 @@ export async function addUsersIngredient(
   isPublic
 ) {
   return await addNewUserIngredient(
+    ingredient,
+    quantity,
+    unit,
+    expiryDate,
+    isPublic
+  );
+}
+
+export async function updateUserIngredient(
+  ingredient,
+  quantity,
+  unit,
+  expiryDate,
+  isPublic
+) {
+  return await updateUsersIngredient(
     ingredient,
     quantity,
     unit,
