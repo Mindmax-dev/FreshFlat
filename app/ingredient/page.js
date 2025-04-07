@@ -5,19 +5,20 @@ import {
   getFlatIngredients,
   addUsersIngredient,
   updateUserIngredient,
+  deleteUsersIngredient,
 } from '@/controller/ingredient';
 
 export default async function Ingredient() {
-  // await addUsersIngredient('sponge', 10, 'g', '2024-09-04', false);
-  console.log(
-    await updateUserIngredient(
-      'sponge',
-      Math.floor(Math.random() * 100),
-      'g',
-      '2024-09-04',
-      false
-    )
+  console.log(await deleteUsersIngredient('potato', '2025-02-26'));
+
+  await updateUserIngredient(
+    'sponge',
+    Math.floor(Math.random() * 100),
+    'g',
+    '2024-09-04',
+    false
   );
+
   return (
     <div>
       <AllIngredients></AllIngredients>

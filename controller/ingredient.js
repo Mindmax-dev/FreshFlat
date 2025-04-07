@@ -5,6 +5,7 @@ import {
   getFlatsIngredients,
   addNewUserIngredient,
   updateUsersIngredient,
+  deleteUserIngredient,
 } from '@/model/ingredient';
 
 export async function getIngredients() {
@@ -53,4 +54,8 @@ export async function updateUserIngredient(
     expiryDate,
     isPublic
   );
+}
+
+export async function deleteUsersIngredient(ingredient, expiryDate) {
+  return await deleteUserIngredient(ingredient, expiryDate);
 }

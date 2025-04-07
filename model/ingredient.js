@@ -198,8 +198,48 @@ export async function addNewUserIngredient(
   return true;
 }
 
-export function deleteUserIngredient(ingredient) {
-  return 'Hi from model/ingredient.deleteUserIngredient';
+export async function deleteUserIngredient(ingredient, expiryDate) {
+  const supabase = await createClient();
+
+  // Check if user is logged in
+  const user = await supabase.auth.getUser();
+
+  if (!user.data.user) {
+    console.error('No user logged in.');
+    return false;
+  }
+
+  const usersIngredients = await getAllUsersIngredients();
+
+  // check if ingredient already exists in users_have_ingredient relation
+  let contains = false;
+
+  usersIngredients[1].forEach((ing) => {
+    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
+      contains = true;
+    }
+  });
+
+  if (!contains) {
+    console.error(
+      'Error: User doesnt have the ingredient. No need to DELETE ingredient.'
+    );
+    return false;
+  }
+
+  const { error } = await supabase
+    .from('users_have_ingredients')
+    .delete()
+    .eq('ingredient', ingredient)
+    .eq('expiry_date', expiryDate)
+    .eq('user', user.data.user.id);
+
+  if (error) {
+    console.error('Error deleting ingredient: ', error);
+    return false;
+  }
+
+  return true;
 }
 
 export async function updateUsersIngredient(
