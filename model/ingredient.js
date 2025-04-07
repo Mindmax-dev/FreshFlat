@@ -180,18 +180,23 @@ export async function addUserIngredient(
     }
   }
 
-  const { error } = supabase.from('users_have_ingredients').insert({
-    user: user.data.user.id,
-    expiry_date: expiryDate,
-    ingredient: ingredient,
-    amount: quantity,
-    unit: unit,
-    is_public: isPublic,
-  });
+  const { data, error } = await supabase
+    .from('users_have_ingredients')
+    .insert({
+      user: user.data.user.id,
+      expiry_date: expiryDate,
+      ingredient: ingredient,
+      amount: quantity,
+      unit: unit,
+      is_public: isPublic,
+    })
+    .select();
+
+  console.log(data);
 
   if (error) {
     console.error('Error adding new ingredient: ', error);
-    return null;
+    return false;
   }
 
   return true;
