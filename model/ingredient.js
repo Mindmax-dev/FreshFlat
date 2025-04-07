@@ -62,14 +62,6 @@ export async function getRecipesIngredients(recipeID) {
   return [recipeName.data[0].title, data];
 }
 
-// maybe redundant
-/**
- * Get all ingredients for the current user.
- */
-export function getUsersIngredients() {
-  return 'Hi from model/ingredient.getUsersIngredients';
-}
-
 /**
  * Get all ingredients for a the current users flat.
  */
@@ -85,29 +77,42 @@ export async function getFlatsIngredients() {
   // need to combine these into one query sometime
 
   // get flat if of current user
-  const flatID = await supabase
+  const { data: data1, error: error1 } = await supabase
     .from('flats_have_users')
     .select('flat')
     .eq('user', user.data.user.id);
 
+  if (error1) {
+    console.error('Error fetching ingredients: ', error1);
+    return null;
+  }
+
   // get users in current users flat
-  const users = await supabase
+  const { data: data2, error: error2 } = await supabase
     .from('flats_have_users')
     .select('user')
-    .eq('flat', flatID.data[0].flat);
+    .eq('flat', data1[0].flat);
+
+  if (error2) {
+    console.error('Error fetching ingredients: ', error2);
+    return null;
+  }
 
   // get ingredients for each user in current users flat
-  // ! We only want to have the public ingredients of the other users in the flat. So needs
-  // ! handling of attribute: is_public
-  const ingredients = await supabase
+  const { data: data3, error: error3 } = await supabase
     .from('users_have_ingredients')
-    .select('ingredient, ingredients(name), expiry_date, amount, unit')
+    .select('ingredient, expiry_date, amount, unit, user')
     .in(
       'user',
-      users.data.map((user) => user.user)
+      data2.map((user) => user.user)
     );
 
-  return ingredients.data;
+  if (error3) {
+    console.error('Error fetching ingredients: ', error3);
+    return null;
+  }
+
+  return data3;
 }
 
 /**
@@ -117,31 +122,179 @@ export async function getFlatsIngredients() {
  * @param {string} ingredient Name of ingredient
  * @param {number} quantity Quantity of ingredient, related to the unit
  * @param {string} unit Unit of ingredient
- * @param {string} expiry_date Expiry date of ingredient. Format: 'yyyy-mm-dd'
+ * @param {string} expiryDate Expiry date of ingredient. Format: 'yyyy-mm-dd'
  * @returns {boolean} True if successful, False otherwise
  */
-export function addUserIngredient(
+export async function addNewUserIngredient(
   ingredient,
   quantity,
-  unit = null,
-  expiry_date
+  unit,
+  expiryDate,
+  isPublic
 ) {
-  return 'Hi from model/ingredient.addUserIngredient';
+  const supabase = await createClient();
+
+  // Check if user is logged in
+  const user = await supabase.auth.getUser();
+
+  if (!user.data.user) {
+    console.error('No user logged in.');
+    return false;
+  }
+
+  const usersIngredients = await getAllUsersIngredients();
+
+  // check if ingredient already exists in users_have_ingredient relation
+  let contains = false;
+
+  usersIngredients[1].forEach((ing) => {
+    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
+      contains = true;
+    }
+  });
+
+  if (contains) {
+    console.error(
+      'Error: User already has the ingredient. Must use updateUsersIngredient() to update the quantity.'
+    );
+    return false;
+  }
+
+  const allIngredients = await getAllIngredients();
+
+  contains = false;
+  allIngredients.forEach((ing) => {
+    if (ing.name === ingredient) {
+      contains = true;
+    }
+  });
+
+  // Add to ingredient relation if it doesn't exist
+  if (!contains) {
+    const { error } = await supabase
+      .from('ingredients')
+      .insert({ name: ingredient });
+
+    if (error) {
+      console.error('Error inserting new ingredient: ', error);
+      return false;
+    }
+  }
+
+  const { data, error } = await supabase.from('users_have_ingredients').insert({
+    user: user.data.user.id,
+    expiry_date: expiryDate,
+    ingredient: ingredient,
+    amount: quantity,
+    unit: unit,
+    is_public: isPublic,
+  });
+
+  if (error) {
+    console.error('Error adding new ingredient: ', error);
+    return false;
+  }
+
+  return true;
 }
 
-export function deleteUserIngredient(ingredient) {
-  return 'Hi from model/ingredient.deleteUserIngredient';
+export async function deleteUserIngredient(ingredient, expiryDate) {
+  const supabase = await createClient();
+
+  // Check if user is logged in
+  const user = await supabase.auth.getUser();
+
+  if (!user.data.user) {
+    console.error('No user logged in.');
+    return false;
+  }
+
+  const usersIngredients = await getAllUsersIngredients();
+
+  // check if ingredient already exists in users_have_ingredient relation
+  let contains = false;
+
+  usersIngredients[1].forEach((ing) => {
+    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
+      contains = true;
+    }
+  });
+
+  if (!contains) {
+    console.error(
+      'Error: User doesnt have the ingredient. No need to DELETE ingredient.'
+    );
+    return false;
+  }
+
+  const { error } = await supabase
+    .from('users_have_ingredients')
+    .delete()
+    .eq('ingredient', ingredient)
+    .eq('expiry_date', expiryDate)
+    .eq('user', user.data.user.id);
+
+  if (error) {
+    console.error('Error deleting ingredient: ', error);
+    return false;
+  }
+
+  return true;
 }
 
-export function setQuantityOfUserIngredient(ingredient, quantity, unit = null) {
-  return 'Hi from model/ingredient.setQuantityOfUserIngredient';
-}
+export async function updateUsersIngredient(
+  ingredient,
+  quantity,
+  unit,
+  expiryDate,
+  isPublic
+) {
+  const supabase = await createClient();
 
-/**
- * Create new ingredient in database.
- *
- * @param {string} ingredientName
- */
-function createIngredient(ingredientName) {
-  return 'Hi from model/ingredient.createIngredient';
+  // Check if user is logged in
+  const user = await supabase.auth.getUser();
+
+  if (!user.data.user) {
+    console.error('No user logged in.');
+    return false;
+  }
+
+  const usersIngredients = await getAllUsersIngredients();
+
+  // check if ingredient already exists in users_have_ingredient relation
+  let contains = false;
+
+  usersIngredients[1].forEach((ing) => {
+    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
+      contains = true;
+    }
+  });
+
+  if (!contains) {
+    console.error(
+      'Error: User doesnt have the ingredient. Must use addUsersIngredient() to add.'
+    );
+    return false;
+  }
+
+  const { error } = await supabase
+    .from('users_have_ingredients')
+    .update({
+      user: user.data.user.id,
+      expiry_date: expiryDate,
+      ingredient: ingredient,
+      amount: quantity,
+      unit: unit,
+      is_public: isPublic,
+    })
+    .eq('user', user.data.user.id)
+    .eq('expiry_date', expiryDate)
+    .eq('ingredient', ingredient);
+
+  if (error) {
+    console.error('Error updating ingredient: ', error);
+    return false;
+  }
+
+  return true;
 }

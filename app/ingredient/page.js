@@ -3,9 +3,20 @@ import {
   getIngredients,
   getRecipeIngredients,
   getFlatIngredients,
+  addUsersIngredient,
+  updateUserIngredient,
+  deleteUsersIngredient,
 } from '@/controller/ingredient';
 
 export default async function Ingredient() {
+  await updateUserIngredient(
+    'sponge',
+    Math.floor(Math.random() * 100),
+    'g',
+    '2024-09-04',
+    false
+  );
+
   return (
     <div>
       <AllIngredients></AllIngredients>
@@ -18,7 +29,7 @@ export default async function Ingredient() {
 
 async function AllIngredients() {
   const data = await getIngredients();
-  const elements = data?.map((d) => <li key={d.name}>{d.name}</li>);
+  const elements = data?.map((d) => <li key={'all-' + d.name}>{d.name}</li>);
 
   return (
     data && (
@@ -34,8 +45,8 @@ async function UserIngredients() {
   const [name, data] = await getAllUserIngredients();
 
   const elements = data?.map((d) => (
-    <li key={d.ingredient}>
-      {d.amount} {d.unit ? ` ${d.unit} ` : ' '}
+    <li key={'user-' + d.ingredient}>
+      x{d.amount} {d.unit ? ` ${d.unit} ` : ' '}
       {d.ingredients.name}
     </li>
   ));
@@ -54,7 +65,7 @@ async function RecipeIngredients() {
   const [name, ingredients] = await getRecipeIngredients(7);
 
   const elements = ingredients.map((ing) => (
-    <li key={ing.ingredient}>
+    <li key={'recipe-' + ing.ingredient}>
       {ing.amount} {ing.unit} {ing.ingredient}
     </li>
   ));
@@ -73,7 +84,7 @@ async function FlatsIngredients() {
   const data = await getFlatIngredients();
 
   const elements = data.map((data) => (
-    <li key={data.ingredient}>
+    <li key={data.user + '-' + data.ingredient}>
       {data.amount} {data.unit} {data.ingredient}
     </li>
   ));
