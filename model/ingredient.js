@@ -125,7 +125,7 @@ export async function getFlatsIngredients() {
  * @param {string} expiryDate Expiry date of ingredient. Format: 'yyyy-mm-dd'
  * @returns {boolean} True if successful, False otherwise
  */
-export async function addUserIngredient(
+export async function addNewUserIngredient(
   ingredient,
   quantity,
   unit,
@@ -146,8 +146,9 @@ export async function addUserIngredient(
 
   // check if ingredient already exists in users_have_ingredient relation
   let contains = false;
-  usersIngredients.forEach((ing) => {
-    if (ing.name === ingredient && ing.expiryDate === expiryDate) {
+
+  usersIngredients[1].forEach((ing) => {
+    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
       contains = true;
     }
   });
@@ -180,19 +181,14 @@ export async function addUserIngredient(
     }
   }
 
-  const { data, error } = await supabase
-    .from('users_have_ingredients')
-    .insert({
-      user: user.data.user.id,
-      expiry_date: expiryDate,
-      ingredient: ingredient,
-      amount: quantity,
-      unit: unit,
-      is_public: isPublic,
-    })
-    .select();
-
-  console.log(data);
+  const { data, error } = await supabase.from('users_have_ingredients').insert({
+    user: user.data.user.id,
+    expiry_date: expiryDate,
+    ingredient: ingredient,
+    amount: quantity,
+    unit: unit,
+    is_public: isPublic,
+  });
 
   if (error) {
     console.error('Error adding new ingredient: ', error);

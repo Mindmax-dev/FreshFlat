@@ -3,7 +3,7 @@ import {
   getAllUsersIngredients,
   getRecipesIngredients,
   getFlatsIngredients,
-  addUserIngredient,
+  addNewUserIngredient,
 } from '@/model/ingredient';
 
 export async function getIngredients() {
@@ -29,7 +29,7 @@ export async function addUsersIngredient(
   expiryDate,
   isPublic
 ) {
-  return await addUserIngredient(
+  return await addNewUserIngredient(
     ingredient,
     quantity,
     unit,
