@@ -209,5 +209,52 @@ export async function updateUsersIngredient(
   expiryDate,
   isPublic
 ) {
-  return 'Hi from model/ingredient.setQuantityOfUserIngredient';
+  const supabase = await createClient();
+
+  // Check if user is logged in
+  const user = await supabase.auth.getUser();
+
+  if (!user.data.user) {
+    console.error('No user logged in.');
+    return false;
+  }
+
+  const usersIngredients = await getAllUsersIngredients();
+
+  // check if ingredient already exists in users_have_ingredient relation
+  let contains = false;
+
+  usersIngredients[1].forEach((ing) => {
+    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
+      contains = true;
+    }
+  });
+
+  if (!contains) {
+    console.error(
+      'Error: User doesnt have the ingredient. Must use addUsersIngredient() to add.'
+    );
+    return false;
+  }
+
+  const { error } = await supabase
+    .from('users_have_ingredients')
+    .update({
+      user: user.data.user.id,
+      expiry_date: expiryDate,
+      ingredient: ingredient,
+      amount: quantity,
+      unit: unit,
+      is_public: isPublic,
+    })
+    .eq('user', user.data.user.id)
+    .eq('expiry_date', expiryDate)
+    .eq('ingredient', ingredient);
+
+  if (error) {
+    console.error('Error updating ingredient: ', error);
+    return false;
+  }
+
+  return true;
 }
