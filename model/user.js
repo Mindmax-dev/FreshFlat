@@ -1,9 +1,28 @@
-import { createClient } from '@/utils/supabase/client';
+'use server';
+
+import { createClient } from '@/utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
+export async function signInUser(email, password) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.error('Error signing in:', error);
+    return false;
+  }
+  return true;
+}
 
 export async function signUpUser(email, password, username) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -13,40 +32,71 @@ export async function signUpUser(email, password, username) {
     },
   });
 
-  return { data, error };
-}
-
-export async function signInUser(email, password) {
-  const supabase = createClient();
-
-  const { user, session, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  return { user, session, error };
+  if (error) {
+    return error;
+  }
+  return true;
 }
 
 export async function signOutUser() {
-  // Sign out the current user
-  // This functionality is currently on the main page
-}
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
 
-export async function getUser() {
-  // Get the current user
-  // This functionality is currently used in the "useEffect" hook in the login page
-}
-
-export async function deleteUser() {
-  // Delete the current user
-  // This functionality is currently not used
+  if (error) {
+    console.error('Error signing up:', error);
+    return false;
+  }
+  return true;
 }
 
 export async function updateUser() {
-  // Update the current user
-  // This functionality is currently not used
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      full_name: 'New Name',
+    },
+  });
+  if (error) {
+    console.error('Error updating user:', error);
+    return null;
+  }
+  return data.user;
 }
 
-export async function resetPassword() {
-  // Send a password reset email
-  // This functionality is currently not used
-}
+// export async function getUser() {
+//   const supabase = await createClient();
+//   const { data, error } = await supabase.auth.getUser();
+//   if (error) {
+//     console.error('Error fetching user:', error);
+//     return null;
+//   }
+//   return data.user;
+// }
+
+// export async function deleteUser() {
+//   // Needs to be handled by admin client
+//   const supabase = await createClient();
+//   const { user } = await supabase.auth.getUser();
+//   if (!user) {
+//     console.error('No user found to delete');
+//     return null;
+//   }
+//   const { data, error } = await supabase.auth.admin.deleteUser();
+
+//   if (error) {
+//     console.error('Error deleting user:', error);
+//     return null;
+//   }
+//   return data;
+// }
+
+// export async function resetPassword(email) {
+//   const supabase = await createClient();
+//   const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+//   if (error) {
+//     console.error('Error sending password reset email:', error);
+//     return null;
+//   }
+//   return data;
+// }
