@@ -3,9 +3,11 @@ import {
   getIngredients,
   getRecipeIngredients,
   getFlatIngredients,
+  addUsersIngredient,
 } from '@/controller/ingredient';
 
 export default async function Ingredient() {
+  await addUsersIngredient('shenayas', 10, 'g', '2024-09-04', false);
   return (
     <div>
       <AllIngredients></AllIngredients>

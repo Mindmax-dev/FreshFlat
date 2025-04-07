@@ -3,6 +3,7 @@ import {
   getAllUsersIngredients,
   getRecipesIngredients,
   getFlatsIngredients,
+  addUserIngredient,
 } from '@/model/ingredient';
 
 export async function getIngredients() {
@@ -19,4 +20,20 @@ export async function getRecipeIngredients(recipeID) {
 
 export async function getFlatIngredients() {
   return await getFlatsIngredients();
+}
+
+export async function addUsersIngredient(
+  ingredient,
+  quantity,
+  unit,
+  expiryDate,
+  isPublic
+) {
+  return await addUserIngredient(
+    ingredient,
+    quantity,
+    unit,
+    expiryDate,
+    isPublic
+  );
 }
