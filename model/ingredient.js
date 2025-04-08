@@ -87,7 +87,7 @@ export async function getFlatsIngredients() {
     return null;
   }
 
-  // get users in current users flat
+  // get users in current users flat (including the current user)
   const { data: data2, error: error2 } = await supabase
     .from('flats_have_users')
     .select('user')
@@ -101,7 +101,7 @@ export async function getFlatsIngredients() {
   // get ingredients for each user in current users flat
   const { data: data3, error: error3 } = await supabase
     .from('users_have_ingredients')
-    .select('ingredient, expiry_date, amount, unit, user')
+    .select('ingredient, expiry_date, amount, unit, user, is_public')
     .in(
       'user',
       data2.map((user) => user.user)
@@ -112,7 +112,13 @@ export async function getFlatsIngredients() {
     return null;
   }
 
-  return data3;
+  // Filter out ingredients of other users that are not public
+  const filteredData = data3.filter(
+    (ingredient) =>
+      ingredient.user === user.data.user.id || ingredient.is_public
+  );
+
+  return filteredData;
 }
 
 /**
