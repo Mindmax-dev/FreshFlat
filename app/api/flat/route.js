@@ -1,4 +1,4 @@
-import { createFlatController, deleteFlatController, getFlatByIdController, getFlatsController, updateFlatController } from "@/controller/flats";
+import { createFlatController, deleteFlatController, getFlatByIdController, getFlatsController, updateFlatController } from "@/controller/flat";
 
 // GET: Fetch all flats or a single flat by ID (via query param)
 export async function GET(req, res) {
