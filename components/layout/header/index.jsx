@@ -24,7 +24,12 @@ export default function Header() {
         >
           Account
         </button>
-        <button className={styles.navButton}>Flat</button>
+        <button
+          className={styles.navButton}
+          onClick={() => router.push('/flat')}
+        >
+          Flat
+        </button>
       </nav>
     </header>
   );
