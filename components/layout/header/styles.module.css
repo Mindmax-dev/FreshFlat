@@ -16,17 +16,17 @@
   cursor: pointer;
 }
 
-.menu-toggle {
+.menuToggle {
   display: none;
   cursor: pointer;
 }
 
-.nav-buttons {
+.navButtons {
   display: flex;
   gap: 1rem;
 }
 
-.nav-button {
+.navButton {
   padding: 0.5rem 1rem;
   background: none;
   color: white;
@@ -35,16 +35,16 @@
   font-size: 1rem;
 }
 
-.nav-button:hover {
+.navButton:hover {
   background-color: var(--mainHoverColor);
 }
 
 @media (max-width: 600px) {
-  .menu-toggle {
+  .menuToggle {
     display: block;
   }
 
-  .nav-buttons {
+  .navButtons {
     display: none;
     flex-direction: column;
     width: 100%;
@@ -52,7 +52,7 @@
     padding-top: 0.5rem;
   }
 
-  .nav-buttons.open {
+  .navButtons.open {
     display: flex;
   }
 
@@ -60,11 +60,11 @@
     order: 1;
   }
 
-  .menu-toggle {
+  .menuToggle {
     order: 2;
   }
 
-  .nav-buttons {
+  .navButtons {
     order: 3;
   }
 }
