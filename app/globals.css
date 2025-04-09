@@ -53,6 +53,25 @@ button {
   border-color: var(--borderColor);
 }
 
+.editButton {
+  background-color: #f0ad4e;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.deleteButton {
+  background-color: #d9534f;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

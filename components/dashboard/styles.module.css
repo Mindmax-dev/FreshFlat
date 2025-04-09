@@ -1,3 +1,20 @@
+.container {
+  padding: 20px;
+}
+
+.addButtonContainer {
+  text-align: right;
+}
+
+.addButton {
+  background-color: #5cb85c;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -11,6 +28,7 @@
   z-index: 1000;
   color: black;
 }
+
 .modalContent {
   background: white;
   padding: 20px;
@@ -19,6 +37,45 @@
   max-width: 500px;
   width: 100%;
 }
+
 .modalContent h2 {
   margin-top: 0;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.confirmButton {
+  background-color: #5cb85c;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  margin-right: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: #999;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.closeButton {
+  background-color: #999;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 20px;
+  cursor: pointer;
 }
