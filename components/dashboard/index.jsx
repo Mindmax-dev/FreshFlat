@@ -3,22 +3,29 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard({ pantryIngredients }) {
-  const [ingredients, setIngredients] = useState(
-    pantryIngredients.map((ingredient, index) => ({
-      ...ingredient,
-      id: index,
-    }))
-  );
+  const router = useRouter();
+  const ingredients = pantryIngredients.map((ingredient, index) => ({
+    ...ingredient,
+    id: index,
+  }));
   const [editingIngredient, setEditingIngredient] = useState(null);
-  const [editValues, setEditValues] = useState({ amount: '', unit: '' });
   const [showAddModal, setShowAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
     amount: '',
     unit: '',
     ingredient: '',
     expiry_date: '',
+    is_public: false,
+  });
+
+  const [editValues, setEditValues] = useState({
+    amount: '',
+    unit: '',
+    expiry_date: '',
+    is_public: false,
   });
 
   const handleDelete = (id) => {
@@ -31,27 +38,32 @@ export default function Dashboard({ pantryIngredients }) {
       amount: ingredient.amount,
       unit: ingredient.unit || '',
       expiry_date: ingredient.expiry_date || '',
+      is_public: ingredient.is_public || false,
     });
   };
 
   const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditValues((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setEditValues((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
   const handleSaveEdit = () => {
-    setIngredients((prev) =>
-      prev.map((ing) =>
-        ing.id === editingIngredient.id
-          ? {
-              ...ing,
-              amount: editValues.amount,
-              unit: editValues.unit,
-              expiry_date: editValues.expiry_date,
-            }
-          : ing
-      )
-    );
+    // setIngredients((prev) =>
+    //   prev.map((ing) =>
+    //     ing.id === editingIngredient.id
+    //       ? {
+    //           ...ing,
+    //           amount: editValues.amount,
+    //           unit: editValues.unit,
+    //           expiry_date: editValues.expiry_date,
+    //           is_public: editValues.is_public,
+    //         }
+    //       : ing
+    //   )
+    // );
     setEditingIngredient(null);
   };
 
@@ -60,24 +72,38 @@ export default function Dashboard({ pantryIngredients }) {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewIngredient((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setNewIngredient((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
-  const handleAddIngredient = () => {
-    const newId = ingredients.length
-      ? ingredients[ingredients.length - 1].id + 1
-      : 0;
-    setIngredients([
-      ...ingredients,
-      {
-        ...newIngredient,
-        id: newId,
-        user: 'You',
+  const handleAddIngredient = async () => {
+    await fetch('/api/ingredient', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    ]);
+      body: JSON.stringify({
+        ingredient: newIngredient.ingredient,
+        amount: newIngredient.amount,
+        unit: newIngredient.unit,
+        expiry_date: newIngredient.expiry_date,
+        is_public: false,
+      }),
+    });
+
+    router.refresh();
+
     setShowAddModal(false);
-    setNewIngredient({ amount: '', unit: '', ingredient: '', expiry_date: '' });
+    setNewIngredient({
+      amount: '',
+      unit: '',
+      ingredient: '',
+      expiry_date: '',
+      is_public: false,
+    });
   };
 
   return (
@@ -159,6 +185,15 @@ export default function Dashboard({ pantryIngredients }) {
               onChange={handleEditChange}
               className={styles.input}
             />
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="is_public"
+                checked={editValues.is_public}
+                onChange={handleEditChange}
+              />
+              Public
+            </label>
             <button onClick={handleSaveEdit} className={styles.confirmButton}>
               Save
             </button>
@@ -210,6 +245,15 @@ export default function Dashboard({ pantryIngredients }) {
               onChange={handleInputChange}
               className={styles.input}
             />
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                name="is_public"
+                checked={newIngredient.is_public}
+                onChange={handleInputChange}
+              />
+              Public
+            </label>
             <button
               onClick={handleAddIngredient}
               className={styles.confirmButton}

@@ -126,14 +126,14 @@ export async function getFlatsIngredients() {
  * match the unit stored in the database in order to succeed.
  *
  * @param {string} ingredient Name of ingredient
- * @param {number} quantity Quantity of ingredient, related to the unit
+ * @param {number} amount amount of ingredient, related to the unit
  * @param {string} unit Unit of ingredient
  * @param {string} expiryDate Expiry date of ingredient. Format: 'yyyy-mm-dd'
  * @returns {boolean} True if successful, False otherwise
  */
 export async function addNewUserIngredient(
   ingredient,
-  quantity,
+  amount,
   unit,
   expiryDate,
   isPublic
@@ -161,7 +161,7 @@ export async function addNewUserIngredient(
 
   if (contains) {
     console.error(
-      'Error: User already has the ingredient. Must use updateUsersIngredient() to update the quantity.'
+      'Error: User already has the ingredient. Must use updateUsersIngredient() to update the amount.'
     );
     return false;
   }
@@ -187,11 +187,11 @@ export async function addNewUserIngredient(
     }
   }
 
-  const { data, error } = await supabase.from('users_have_ingredients').insert({
+  const { error } = await supabase.from('users_have_ingredients').insert({
     user: user.data.user.id,
     expiry_date: expiryDate,
     ingredient: ingredient,
-    amount: quantity,
+    amount: amount,
     unit: unit,
     is_public: isPublic,
   });
@@ -250,7 +250,7 @@ export async function deleteUserIngredient(ingredient, expiryDate) {
 
 export async function updateUsersIngredient(
   ingredient,
-  quantity,
+  amount,
   unit,
   expiryDate,
   isPublic
@@ -289,7 +289,7 @@ export async function updateUsersIngredient(
       user: user.data.user.id,
       expiry_date: expiryDate,
       ingredient: ingredient,
-      amount: quantity,
+      amount: amount,
       unit: unit,
       is_public: isPublic,
     })

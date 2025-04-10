@@ -79,3 +79,10 @@
   margin-top: 20px;
   cursor: pointer;
 }
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
