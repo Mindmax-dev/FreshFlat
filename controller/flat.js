@@ -1,4 +1,3 @@
-// controller/flats.js
 const { createFlat, getFlats, getFlatById, updateFlat, deleteFlat } = require('@/model/flat');
 
 export async function createFlatController(req, res) {
