@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styles from './styles.module.css';
 import { useRouter } from 'next/navigation';
 
-export default function Dashboard({ pantryIngredients }) {
+export default function Dashboard({ pantryIngredients, user }) {
   const router = useRouter();
   const ingredients = pantryIngredients.map((ingredient, index) => ({
     ...ingredient,
@@ -62,19 +62,22 @@ export default function Dashboard({ pantryIngredients }) {
   };
 
   const handleSaveEdit = () => {
-    // setIngredients((prev) =>
-    //   prev.map((ing) =>
-    //     ing.id === editingIngredient.id
-    //       ? {
-    //           ...ing,
-    //           amount: editValues.amount,
-    //           unit: editValues.unit,
-    //           expiry_date: editValues.expiry_date,
-    //           is_public: editValues.is_public,
-    //         }
-    //       : ing
-    //   )
-    // );
+    fetch(`/api/ingredient`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ingredient: editingIngredient.ingredient,
+        amount: editValues.amount,
+        unit: editValues.unit,
+        expiry_date: editValues.expiry_date,
+        is_public: editValues.is_public,
+      }),
+    });
+
+    router.refresh();
+
     setEditingIngredient(null);
   };
 
@@ -136,23 +139,30 @@ export default function Dashboard({ pantryIngredients }) {
                 {ingredient.amount} {ingredient.unit}
               </td>
               <td>{ingredient.ingredient}</td>
-              <td>{ingredient.user}</td>
+              <td>{ingredient.user.name}</td>
               <td>{ingredient.expiry_date}</td>
               <td>
-                <button
-                  className="editButton"
-                  onClick={() => handleEdit(ingredient)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="deleteButton"
-                  onClick={() =>
-                    handleDelete(ingredient.ingredient, ingredient.expiry_date)
-                  }
-                >
-                  Delete
-                </button>
+                {ingredient.user.id === user.userId && (
+                  <>
+                    <button
+                      className="editButton"
+                      onClick={() => handleEdit(ingredient)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="deleteButton"
+                      onClick={() =>
+                        handleDelete(
+                          ingredient.ingredient,
+                          ingredient.expiry_date
+                        )
+                      }
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
@@ -291,8 +301,16 @@ Dashboard.propTypes = {
     PropTypes.shape({
       amount: PropTypes.string.isRequired,
       ingredient: PropTypes.string.isRequired,
-      user: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+      }).isRequired,
+      unit: PropTypes.string,
       expiry_date: PropTypes.string.isRequired,
     })
   ).isRequired,
+  user: PropTypes.shape({
+    userId: PropTypes.string.isRequired,
+    userName: PropTypes.string.isRequired,
+  }).isRequired,
 };

@@ -1,3 +1,4 @@
+import { createAdminClient } from '@/utils/supabase/admin';
 import { createClient } from '@/utils/supabase/server';
 
 export async function getAllIngredients() {
@@ -66,57 +67,59 @@ export async function getRecipesIngredients(recipeID) {
  * Get all ingredients for a the current users flat.
  */
 export async function getFlatsIngredients() {
-  const supabase = await createClient();
-  const user = await supabase.auth.getUser();
+  const supabase = await createAdminClient();
 
-  if (!user.data.user) {
+  const { data: authUser } = await supabase.auth.getUser();
+
+  if (!authUser?.user) {
     console.log('No user logged in.');
     return null;
   }
 
-  // need to combine these into one query sometime
+  const userId = authUser.user.id;
 
-  // get flat if of current user
   const { data: data1, error: error1 } = await supabase
     .from('flats_have_users')
     .select('flat')
-    .eq('user', user.data.user.id);
+    .eq('user', userId);
 
-  if (error1) {
-    console.error('Error fetching ingredients: ', error1);
-    return null;
-  }
+  if (error1 || !data1?.length) return null;
 
-  // get users in current users flat (including the current user)
+  const flatId = data1[0].flat;
+
   const { data: data2, error: error2 } = await supabase
     .from('flats_have_users')
     .select('user')
-    .eq('flat', data1[0].flat);
+    .eq('flat', flatId);
 
-  if (error2) {
-    console.error('Error fetching ingredients: ', error2);
-    return null;
-  }
+  if (error2 || !data2?.length) return null;
 
-  // get ingredients for each user in current users flat
+  const userIds = data2.map((u) => u.user);
+
   const { data: data3, error: error3 } = await supabase
     .from('users_have_ingredients')
     .select('ingredient, expiry_date, amount, unit, user, is_public')
-    .in(
-      'user',
-      data2.map((user) => user.user)
-    );
+    .in('user', userIds);
 
-  if (error3) {
-    console.error('Error fetching ingredients: ', error3);
-    return null;
-  }
+  if (error3) return null;
 
-  // Filter out ingredients of other users that are not public
-  const filteredData = data3.filter(
-    (ingredient) =>
-      ingredient.user === user.data.user.id || ingredient.is_public
+  // Fetch auth users
+  const { data: allUsers } = await supabase.auth.admin.listUsers();
+  const userMap = new Map(
+    allUsers.users
+      .filter((u) => userIds.includes(u.id))
+      .map((u) => [u.id, u.user_metadata?.full_name || u.email])
   );
+
+  const filteredData = data3
+    .filter((ing) => ing.user === userId || ing.is_public)
+    .map((ing) => ({
+      ...ing,
+      user: {
+        id: ing.user,
+        name: userMap.get(ing.user) || 'Unknown',
+      },
+    }));
 
   return filteredData;
 }

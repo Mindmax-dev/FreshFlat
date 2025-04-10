@@ -1,4 +1,8 @@
-import { addNewUserIngredient, deleteUserIngredient } from '@/model/ingredient';
+import {
+  addNewUserIngredient,
+  deleteUserIngredient,
+  updateUsersIngredient,
+} from '@/model/ingredient';
 import { NextResponse } from 'next/server';
 
 export async function POST(req, res) {
@@ -23,6 +27,31 @@ export async function POST(req, res) {
     console.error('Error handling POST request:', error);
     return NextResponse.json(
       { error: 'Error handling POST request' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(req, res) {
+  try {
+    const body = await req.json();
+
+    await updateUsersIngredient(
+      body.ingredient,
+      body.amount,
+      body.unit,
+      body.expiry_date,
+      body.is_public
+    );
+
+    return NextResponse.json(
+      { message: 'PUT request received successfully', body },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error handling PUT request:', error);
+    return NextResponse.json(
+      { error: 'Error handling PUT request' },
       { status: 500 }
     );
   }
