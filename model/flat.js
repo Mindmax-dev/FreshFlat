@@ -2,7 +2,7 @@
 import { createClient } from '@/utils/supabase/client';
 
 export async function createFlat(name, adminId) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: flat, error } = await supabase.from('flats').insert([{ name, admin_id: adminId }]);
     return { flat, error };
 }
