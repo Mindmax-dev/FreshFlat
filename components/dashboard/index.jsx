@@ -28,8 +28,19 @@ export default function Dashboard({ pantryIngredients }) {
     is_public: false,
   });
 
-  const handleDelete = (id) => {
-    setIngredients(ingredients.filter((ingredient) => ingredient.id !== id));
+  const handleDelete = (ingredient, expiry_date) => {
+    fetch(`/api/ingredient/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ingredient: ingredient,
+        expiry_date: expiry_date,
+      }),
+    });
+
+    router.refresh();
   };
 
   const handleEdit = (ingredient) => {
@@ -136,7 +147,9 @@ export default function Dashboard({ pantryIngredients }) {
                 </button>
                 <button
                   className="deleteButton"
-                  onClick={() => handleDelete(ingredient.id)}
+                  onClick={() =>
+                    handleDelete(ingredient.ingredient, ingredient.expiry_date)
+                  }
                 >
                   Delete
                 </button>

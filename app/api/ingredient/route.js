@@ -1,8 +1,7 @@
-import { addNewUserIngredient } from '@/model/ingredient';
+import { addNewUserIngredient, deleteUserIngredient } from '@/model/ingredient';
 import { NextResponse } from 'next/server';
 
 export async function POST(req, res) {
-  console.log('Received POST request:', req.method, req.url);
   try {
     // Parse the request body
     const body = await req.json();
@@ -24,6 +23,25 @@ export async function POST(req, res) {
     console.error('Error handling POST request:', error);
     return NextResponse.json(
       { error: 'Error handling POST request' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req, res) {
+  try {
+    const body = await req.json();
+
+    await deleteUserIngredient(body.ingredient, body.expiry_date);
+
+    return NextResponse.json(
+      { message: 'DELETE request received successfully', body },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error handling DELETE request:', error);
+    return NextResponse.json(
+      { error: 'Error handling DELETE request' },
       { status: 500 }
     );
   }
