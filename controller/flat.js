@@ -15,23 +15,6 @@ export async function getFlatOfUserController() {
   return flat;
 }
 
-// export async function createFlatController(req, res) {
-//   try {
-//     const { name, adminId } = req.json();
-//     const { flat, error } = await createFlat(name, adminId);
-//     if (error) {
-//       return new Response(JSON.stringify({ error: error.message }), {
-//         status: 400,
-//       });
-//     }
-//     return new Response(JSON.stringify(flat), { status: 201 });
-//   } catch (error) {
-//     return new Response(
-//       JSON.stringify({ error: 'An error occurred while creating the flat' }),
-//       { status: 500 }
-//     );
-//   }
-// }
 // export async function getFlatsController(req, res) {
 //   try {
 //     const { flats, error } = await getFlats();

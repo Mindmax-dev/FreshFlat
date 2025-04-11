@@ -34,16 +34,54 @@ export async function updateSession(request) {
   // issues with users being randomly logged out.
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Allow all /api routes to be called without redirection
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    return supabaseResponse;
+  }
+
   if (!user && !request.nextUrl.pathname.startsWith('/auth')) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    url.pathname = '/auth/login';
-    return NextResponse.redirect(url);
+    if (url.pathname !== '/auth/login') {
+      url.pathname = '/auth/login';
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (user) {
+    const { data: flats } = await supabase
+      .from('flats_have_users')
+      .select('*')
+      .eq('user', user.id);
+
+    if (
+      flats &&
+      flats.length > 0 &&
+      request.nextUrl.pathname === '/chooseFlat'
+    ) {
+      // redirect to /
+      const url = request.nextUrl.clone();
+      if (url.pathname !== '/') {
+        url.pathname = '/';
+        return NextResponse.redirect(url);
+      }
+    }
+
+    if (
+      (!flats || flats.length === 0) &&
+      !request.nextUrl.pathname.startsWith('/chooseFlat')
+    ) {
+      // user is logged in but not associated with any flat
+      const url = request.nextUrl.clone();
+      if (url.pathname !== '/chooseFlat') {
+        url.pathname = '/chooseFlat';
+        return NextResponse.redirect(url);
+      }
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.

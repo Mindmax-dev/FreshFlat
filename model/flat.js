@@ -34,13 +34,21 @@ export async function getFlatOfUser() {
   return { flat: flatObject, error: flat.error };
 }
 
-// export async function createFlat(name, adminId) {
-//   const supabase = createClient();
-//   const { data: flat, error } = await supabase
-//     .from('flats')
-//     .insert([{ name, admin_id: adminId }]);
-//   return { flat, error };
-// }
+export async function createFlat(name, adminId) {
+  const supabase = await createClient();
+  const { data: flat, error } = await supabase
+    .from('flats')
+    .insert([{ name, admin_id: adminId }]);
+  return { flat, error };
+}
+
+export async function addFlatmateToFlat(flatId, userId) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('flats_have_users')
+    .insert({ flat: flatId, user: userId });
+  return { error };
+}
 
 // export async function getFlats() {
 //   const supabase = createClient();
@@ -69,14 +77,6 @@ export async function getFlatOfUser() {
 // export async function deleteFlat(flatId) {
 //   const supabase = createClient();
 //   const { error } = await supabase.from('flats').delete().eq('id', flatId);
-//   return { error };
-// }
-
-// export async function addFlatmateToFlat(flatId, userId) {
-//   const supabase = createClient();
-//   const { error } = await supabase
-//     .from('flats_have_users')
-//     .insert({ flat: flatId, user: userId });
 //   return { error };
 // }
 
