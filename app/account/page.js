@@ -48,7 +48,7 @@ export default function Account() {
   return (
     <>
       <h1>Account</h1>
-      <div>
+      <div style={{ marginBottom: '1rem' }}>
         <label htmlFor="username">Username:</label>
         {editing ? (
           <input
@@ -61,12 +61,16 @@ export default function Account() {
           <span>{username}</span>
         )}
       </div>
-      {editing ? (
-        <button onClick={handleSave}>Save</button>
-      ) : (
-        <button onClick={() => setEditing(true)}>Edit</button>
-      )}
-      <button onClick={() => handlePasswordReset(username)}>Reset Password</button>
+      <div style={{ marginBottom: '1rem' }}>
+        {editing ? (
+          <button onClick={handleSave}>Save</button>
+        ) : (
+          <button onClick={() => setEditing(true)}>Edit</button>
+        )}
+      </div>
+      <div>
+        <button onClick={() => handlePasswordReset(username)}>Reset Password</button>
+      </div>
     </>
   );
 }
