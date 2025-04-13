@@ -177,10 +177,6 @@ export default function Dashboard({ pantryIngredients, user }) {
           Add Ingredient
         </button>
       </div>
-      <button onClick={() => router.push('/recipe/selectIngredients')}>
-        Generate Recipe
-      </button>
-
       {editingIngredient && (
         <div className={styles.modalOverlay} onClick={closeModal}>
           <div

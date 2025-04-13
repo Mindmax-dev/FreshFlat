@@ -25,6 +25,15 @@ export default function Header() {
         {isOpen ? <X /> : <Menu />}
       </div>
       <nav className={`${styles.navButtons} ${isOpen ? styles.open : ''}`}>
+        <button className={styles.navButton} onClick={() => router.push('/')}>
+          Pantry
+        </button>
+        <button
+          className={styles.navButton}
+          onClick={() => router.push('/recipe/collection')}
+        >
+          Recipes
+        </button>
         <button
           className={styles.navButton}
           onClick={() => router.push('/account')}
