@@ -1,0 +1,48 @@
+.recipeContainer {
+  background-color: white;
+  color: black;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.headLine {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.interHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+.bottomSection {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.ingredients,
+.instructions {
+  flex: 1;
+  min-width: 300px;
+}
+
+.ingredients ul {
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.instructions p {
+  margin-top: 1rem;
+  line-height: 1.6;
+}

@@ -14,4 +14,5 @@ _Link to the Excel file:_ https://otagouni-my.sharepoint.com/:x:/g/personal/beum
 3. Open Terminal in IDE with prefered folder location
 4. run "git clone https://github.com/Mindmax-dev/FreshFlat.git"
 5. get in the Project with "cd FreshFlat" and open new VSC Window with "code ."
-6. Get the ENV variables from one of the project members for the .env file that needs to be created in the root of the project
+6. Run "npm install" to install latest dependencies
+7. Get the ENV variables from one of the project members for the .env file that needs to be created in the root of the project

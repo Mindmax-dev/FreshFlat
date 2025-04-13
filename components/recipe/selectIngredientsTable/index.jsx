@@ -100,11 +100,17 @@ export default function SelectIngredientsTable({
       </thead>
       <tbody>
         {ingredients.map((ingredient, index) => (
-          <tr key={ingredient.name + index}>
+          <tr
+            key={
+              ingredient.name +
+              ingredient.created_by.name +
+              ingredient.expiry_date
+            }
+          >
             <td>{ingredient.quantity}</td>
             <td>{ingredient.unit}</td>
             <td>{ingredient.name}</td>
-            <td>{ingredient.created_by}</td>
+            <td>{ingredient.created_by.name}</td>
             <td>{ingredient.expiry_date}</td>
             <td>
               <input
