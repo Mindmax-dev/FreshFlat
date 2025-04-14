@@ -104,7 +104,7 @@ export default function Dashboard({ pantryIngredients, user }) {
         amount: newIngredient.amount,
         unit: newIngredient.unit,
         expiry_date: newIngredient.expiry_date,
-        is_public: false,
+        is_public: newIngredient.is_public,
       }),
     });
 

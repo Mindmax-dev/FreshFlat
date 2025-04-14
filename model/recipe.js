@@ -23,9 +23,9 @@ export async function generateRecipeWithAi(ingredients, difficulty) {
           {
             type: 'input_text',
             text:
-              'Generate me a' +
+              'Generate me a recipe with the diffifculty:' +
               difficulty +
-              'recipe with these ingredients:' +
+              'You are only allowed to use the following ingredients and the maximum amount of them. You do not have to use all of the ingredients:' +
               ingredients,
           },
         ],
