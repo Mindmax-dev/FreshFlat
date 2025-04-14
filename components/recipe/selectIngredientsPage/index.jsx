@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import SelectIngredientsTable from '../selectIngredientsTable';
 import { useRouter } from 'next/navigation';
+import styles from './styles.module.css';
 
 export default function SelectIngredientsPage({ flatIngredients }) {
   const [ingredients, setIngredients] = useState(flatIngredients);
@@ -31,7 +32,7 @@ export default function SelectIngredientsPage({ flatIngredients }) {
   }, [ingredients]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Create Recipe</h1>
       <p>Choose your ingredients</p>
       <SelectIngredientsTable
@@ -50,7 +51,11 @@ export default function SelectIngredientsPage({ flatIngredients }) {
           <option value="hard">Hard</option>
         </select>
       </div>
-      <button style={{ marginTop: '20px' }} onClick={handleGenerateRecipe}>
+      <button
+        style={{ marginTop: '20px' }}
+        className="whiteActionButton"
+        onClick={handleGenerateRecipe}
+      >
         Generate Recipe
       </button>
     </div>

@@ -30,7 +30,7 @@ export default function Header() {
         </button>
         <button
           className={styles.navButton}
-          onClick={() => router.push('/recipe/collection')}
+          onClick={() => router.push('/recipe/selectIngredients')}
         >
           Recipes
         </button>

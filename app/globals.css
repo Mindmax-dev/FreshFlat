@@ -57,6 +57,20 @@ button {
   border-color: var(--borderColor);
 }
 
+.whiteActionButton {
+  background-color: #fcfcfa;
+  color: black;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  max-width: 150px;
+}
+
+.whiteActionButton:hover {
+  background-color: lightgray;
+}
+
 .editButton {
   background-color: #f0ad4e;
   color: white;
@@ -108,4 +122,28 @@ tr:nth-child(even) {
 
 tr:hover {
   background-color: var(--cellColorHover);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: black;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='none' stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select:focus {
+  outline: none;
+  border-color: black;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
