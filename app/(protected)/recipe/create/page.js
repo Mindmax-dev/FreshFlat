@@ -5,10 +5,13 @@ import { Mosaic } from 'react-loading-indicators';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Recipe from '@/components/recipe/recipe';
+import styles from './page.module.css';
 
 export default function CreateRecipe() {
   return (
-    <Suspense fallback={<Mosaic color="#32cd32" size="medium" text="" textColor="" />}>
+    <Suspense
+      fallback={<Mosaic color="#32cd32" size="medium" text="" textColor="" />}
+    >
       <RecipeFetcher />
     </Suspense>
   );
@@ -29,7 +32,8 @@ function RecipeFetcher() {
           body: JSON.stringify({ ingredients, difficulty }),
         });
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
         const recipeGenerationResponse = await response.json();
         setRecipeJson(JSON.parse(recipeGenerationResponse));
       } catch (error) {
@@ -41,5 +45,13 @@ function RecipeFetcher() {
     generateRecipe();
   }, [difficulty, ingredients]);
 
-  return recipeJson ? <Recipe recipeJson={recipeJson} /> : null;
+  return (
+    <div className={styles.generatedRecipePageContainer}>
+      {recipeJson ? (
+        <Recipe recipeJson={recipeJson} />
+      ) : (
+        <Mosaic color="#32cd32" size="medium" text="" textColor="" />
+      )}
+    </div>
+  );
 }
