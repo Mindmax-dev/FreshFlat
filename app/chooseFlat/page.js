@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import styles from './page.module.css';
 
 export default function ChooseFlatPage() {
   const router = useRouter();
@@ -9,56 +10,52 @@ export default function ChooseFlatPage() {
   const [flatCode, setFlatCode] = useState('');
 
   const handleCreateFlat = async () => {
-    await fetch('/api/flat', {
+    const res = await fetch('/api/flat', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ flatName: flatName }), // Replace with actual flat name input
-    }).then((response) => {
-      if (response.ok) {
-        router.push('/');
-      }
-      // ?= Error Handling
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ flatName }),
     });
+    if (res.ok) router.push('/');
+    // TODO: Handle errors
   };
 
   const handleJoinFlat = async () => {
-    await fetch('/api/flat', {
+    const res = await fetch('/api/flat', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ flatCode: flatCode }),
-    }).then((response) => {
-      if (response.ok) {
-        router.push('/');
-      }
-      // ?= Error Handling
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ flatCode }),
     });
+    if (res.ok) router.push('/');
+    // TODO: Handle errors
   };
 
   return (
-    <div className="container">
-      <div className="box">
+    <div className={styles.container}>
+      <div className={styles.box}>
         <div>CREATE FLAT</div>
         <input
+          className={styles.input}
           type="text"
           placeholder="Enter flat name"
           value={flatName}
           onChange={(e) => setFlatName(e.target.value)}
         />
-        <button onClick={() => handleCreateFlat()}>Done</button>
+        <button className={styles.button} onClick={handleCreateFlat}>
+          Done
+        </button>
       </div>
-      <div className="box">
+      <div className={styles.box}>
         <div>JOIN FLAT</div>
         <input
+          className={styles.input}
           type="text"
           placeholder="Enter flat code"
           value={flatCode}
           onChange={(e) => setFlatCode(e.target.value)}
         />
-        <button onClick={() => handleJoinFlat()}>Done</button>
+        <button className={styles.button} onClick={handleJoinFlat}>
+          Done
+        </button>
       </div>
     </div>
   );
