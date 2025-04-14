@@ -1,10 +1,20 @@
 'use client';
+
+import { Suspense } from 'react';
+import { Mosaic } from 'react-loading-indicators';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Mosaic } from 'react-loading-indicators';
 import Recipe from '@/components/recipe/recipe';
 
 export default function CreateRecipe() {
+  return (
+    <Suspense fallback={<Mosaic color="#32cd32" size="medium" text="" textColor="" />}>
+      <RecipeFetcher />
+    </Suspense>
+  );
+}
+
+function RecipeFetcher() {
   const searchParams = useSearchParams();
   const [recipeJson, setRecipeJson] = useState(null);
   const difficulty = searchParams.get('difficulty');
@@ -19,8 +29,7 @@ export default function CreateRecipe() {
           body: JSON.stringify({ ingredients, difficulty }),
         });
 
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const recipeGenerationResponse = await response.json();
         setRecipeJson(JSON.parse(recipeGenerationResponse));
       } catch (error) {
@@ -32,9 +41,5 @@ export default function CreateRecipe() {
     generateRecipe();
   }, [difficulty, ingredients]);
 
-  return recipeJson ? (
-    <Recipe recipeJson={recipeJson} />
-  ) : (
-    <Mosaic color="#32cd32" size="medium" text="" textColor="" />
-  );
+  return recipeJson ? <Recipe recipeJson={recipeJson} /> : null;
 }
