@@ -4,6 +4,10 @@
   --mainColor: green;
   --mainHoverColor: darkgreen;
   --borderColor: #064a00;
+  --cellColorEven: rgb(237, 237, 237);
+  --cellColorOdd: rgb(211, 211, 211);
+  --cellColorHover: rgb(154, 154, 154);
+  --cellColorHeader: gray;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,15 +91,21 @@ td {
 }
 
 th {
-  background-color: var(--mainColor);
+  background-color: var(--cellColorHeader);
   color: white;
   font-weight: bold;
 }
 
+tr {
+  background-color: var(--cellColorOdd);
+  color: #000;
+}
+
 tr:nth-child(even) {
-  background-color: rgba(0, 128, 0, 0.1); /* Light green tint */
+  background-color: var(--cellColorEven);
+  color: #000;
 }
 
 tr:hover {
-  background-color: rgba(0, 128, 0, 0.2); /* Slightly darker green tint */
+  background-color: var(--cellColorHover);
 }
