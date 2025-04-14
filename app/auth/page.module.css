@@ -1,0 +1,12 @@
+.centerContent {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  background-color: whitesmoke;
+  border-radius: 50%;
+  padding: 1rem;
+}
