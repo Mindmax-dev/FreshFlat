@@ -274,7 +274,7 @@ export async function updateUsersIngredient(
   let contains = false;
 
   usersIngredients[1].forEach((ing) => {
-    if (ing.ingredient === ingredient && ing.expiry_date === expiryDate) {
+    if (ing.ingredient === ingredient) {
       contains = true;
     }
   });
@@ -297,7 +297,6 @@ export async function updateUsersIngredient(
       is_public: isPublic,
     })
     .eq('user', user.data.user.id)
-    .eq('expiry_date', expiryDate)
     .eq('ingredient', ingredient);
 
   if (error) {

@@ -5,7 +5,7 @@ import {
 } from '@/model/ingredient';
 import { NextResponse } from 'next/server';
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
     // Parse the request body
     const body = await req.json();
@@ -32,7 +32,7 @@ export async function POST(req, res) {
   }
 }
 
-export async function PUT(req, res) {
+export async function PUT(req) {
   try {
     const body = await req.json();
 
@@ -57,7 +57,7 @@ export async function PUT(req, res) {
   }
 }
 
-export async function DELETE(req, res) {
+export async function DELETE(req) {
   try {
     const body = await req.json();
 

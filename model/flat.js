@@ -38,7 +38,14 @@ export async function createFlat(name, adminId) {
   const supabase = await createClient();
   const { data: flat, error } = await supabase
     .from('flats')
-    .insert([{ name, admin_id: adminId }]);
+    .insert({
+      name: name,
+      admin: adminId,
+    })
+    .select();
+
+  await addFlatmateToFlat(flat[0].id, adminId);
+
   return { flat, error };
 }
 

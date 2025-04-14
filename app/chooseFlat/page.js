@@ -10,13 +10,13 @@ export default function ChooseFlatPage() {
   const [flatCode, setFlatCode] = useState('');
 
   const handleCreateFlat = async () => {
-    const res = await fetch('/api/flat', {
+    await fetch('/api/flat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ flatName }),
+    }).then(() => {
+      router.push('/');
     });
-    if (res.ok) router.push('/');
-    // TODO: Handle errors
   };
 
   const handleJoinFlat = async () => {

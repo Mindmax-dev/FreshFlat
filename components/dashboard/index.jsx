@@ -140,7 +140,9 @@ export default function Dashboard({ pantryIngredients, user }) {
               </td>
               <td>{ingredient.ingredient}</td>
               <td>{ingredient.user.name}</td>
-              <td>{ingredient.expiry_date}</td>
+              <td>
+                {new Date(ingredient.expiry_date).toLocaleDateString('en-GB')}
+              </td>
               <td>
                 {ingredient.user.id === user.userId && (
                   <>
