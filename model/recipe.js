@@ -7,6 +7,7 @@ export async function generateRecipeWithAi(ingredients, difficulty) {
   });
   const response = await openai.responses.create({
     model: 'gpt-4o-mini',
+    stream: false,
     input: [
       {
         role: 'system',
