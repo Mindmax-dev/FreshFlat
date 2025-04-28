@@ -5,6 +5,7 @@ import { Mosaic } from 'react-loading-indicators';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Recipe from '@/components/recipe/recipe';
+import RecipeSaveButton from '@/components/recipe/saveButton';
 import styles from './page.module.css';
 
 export default function CreateRecipe() {
@@ -48,7 +49,10 @@ function RecipeFetcher() {
   return (
     <div className={styles.generatedRecipePageContainer}>
       {recipeJson ? (
-        <Recipe recipeJson={recipeJson} />
+        <>
+          <Recipe recipeJson={recipeJson} />
+          <RecipeSaveButton recipeJson={recipeJson} />
+        </>
       ) : (
         <Mosaic color="#32cd32" size="medium" text="" textColor="" />
       )}

@@ -170,12 +170,13 @@ export async function saveRecipeToDatabase(
     .select();
 
   if (saveRecipe.error) {
-    console.error('Error saving recipe:', error);
+    console.error('Error saving recipe:', saveRecipe.error);
     return null;
   }
 
   console.log('Recipe saved:', saveRecipe);
-
+  console.log('INGREDIENTS:');
+  console.log(ingredients);
   const ingredientsData = ingredients.map((ingredient) => ({
     recipe: saveRecipe.data[0].id,
     ingredient: ingredient.id,

@@ -1,4 +1,4 @@
-import { generateRecipeWithAi } from '@/model/recipe';
+import { generateRecipeWithAi, saveRecipeToDatabase } from '@/model/recipe';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
@@ -7,4 +7,18 @@ export async function POST(request) {
   return await generateRecipeWithAi(ingredients, difficulty).then((recipe) => {
     return NextResponse.json(recipe, { status: 200 });
   });
+}
+
+export async function PUT(request) {
+  const body = await request.json();
+
+  await saveRecipeToDatabase(
+    body.title,
+    body.instructions,
+    body.preparation_time,
+    body.cooking_time,
+    body.ingredients
+  );
+
+  return NextResponse.json({}, { status: 200 });
 }
