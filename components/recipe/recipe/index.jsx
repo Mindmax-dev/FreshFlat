@@ -2,6 +2,7 @@ import { ChefHat, List, ScrollText } from 'lucide-react';
 import styles from './index.module.css'; // ← CSS module import
 
 export default function Recipe({ recipeJson }) {
+  console.log(recipeJson);
   return (
     <div className={styles.recipeContainer}>
       <div className={styles.headLine}>
