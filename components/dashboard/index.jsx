@@ -11,6 +11,7 @@ export default function Dashboard({ pantryIngredients, user }) {
     ...ingredient,
     id: index,
   }));
+  const [ingredientSearchFilter, setIngredientSearchFilter] = useState('');
   const [editingIngredient, setEditingIngredient] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
@@ -120,6 +121,48 @@ export default function Dashboard({ pantryIngredients, user }) {
     });
   };
 
+  const handleSearchboxChange = (e) => {
+    setIngredientSearchFilter(e.target.value);
+  };
+
+  const ingredientElements = ingredients
+    .filter((ingredient) => {
+      if (ingredientSearchFilter === '') {
+        return true;
+      }
+      return ingredient.ingredient.includes(ingredientSearchFilter, 0);
+    })
+    .map((ingredient) => (
+      <tr key={ingredient.id}>
+        <td>
+          {ingredient.amount} {ingredient.unit}
+        </td>
+        <td>{ingredient.ingredient}</td>
+        <td>{ingredient.user.name}</td>
+        <td>{new Date(ingredient.expiry_date).toLocaleDateString('en-GB')}</td>
+        <td>
+          {ingredient.user.id === user.userId && (
+            <>
+              <button
+                className="editButton"
+                onClick={() => handleEdit(ingredient)}
+              >
+                Edit
+              </button>
+              <button
+                className="deleteButton"
+                onClick={() =>
+                  handleDelete(ingredient.ingredient, ingredient.expiry_date)
+                }
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </td>
+      </tr>
+    ));
+
   return (
     <div className={styles.container}>
       <table className={styles.table}>
@@ -132,43 +175,7 @@ export default function Dashboard({ pantryIngredients, user }) {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
-              <td>
-                {ingredient.amount} {ingredient.unit}
-              </td>
-              <td>{ingredient.ingredient}</td>
-              <td>{ingredient.user.name}</td>
-              <td>
-                {new Date(ingredient.expiry_date).toLocaleDateString('en-GB')}
-              </td>
-              <td>
-                {ingredient.user.id === user.userId && (
-                  <>
-                    <button
-                      className="editButton"
-                      onClick={() => handleEdit(ingredient)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="deleteButton"
-                      onClick={() =>
-                        handleDelete(
-                          ingredient.ingredient,
-                          ingredient.expiry_date
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{ingredientElements}</tbody>
       </table>
 
       <div className={styles.addButtonContainer}>
@@ -178,6 +185,11 @@ export default function Dashboard({ pantryIngredients, user }) {
         >
           Add Ingredient
         </button>
+        <input
+          type="search"
+          onChange={handleSearchboxChange}
+          placeholder="Search..."
+        />
       </div>
       {editingIngredient && (
         <div className={styles.modalOverlay} onClick={closeModal}>
