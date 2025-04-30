@@ -86,3 +86,8 @@
   gap: 8px;
   margin-top: 10px;
 }
+
+.searchBox {
+  float: right;
+  margin-bottom: 1rem;
+}

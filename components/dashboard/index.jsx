@@ -165,6 +165,12 @@ export default function Dashboard({ pantryIngredients, user }) {
 
   return (
     <div className={styles.container}>
+      <input
+        className={styles.searchBox}
+        type="search"
+        onChange={handleSearchboxChange}
+        placeholder="Search..."
+      />
       <table className={styles.table}>
         <thead>
           <tr>
@@ -185,11 +191,6 @@ export default function Dashboard({ pantryIngredients, user }) {
         >
           Add Ingredient
         </button>
-        <input
-          type="search"
-          onChange={handleSearchboxChange}
-          placeholder="Search..."
-        />
       </div>
       {editingIngredient && (
         <div className={styles.modalOverlay} onClick={closeModal}>
