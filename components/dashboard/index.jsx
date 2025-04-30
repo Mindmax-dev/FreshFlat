@@ -169,7 +169,7 @@ export default function Dashboard({ pantryIngredients, user }) {
         className={styles.searchBox}
         type="search"
         onChange={handleSearchboxChange}
-        placeholder="Search..."
+        placeholder="Search ingredient..."
       />
       <table className={styles.table}>
         <thead>
