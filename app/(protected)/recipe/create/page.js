@@ -45,15 +45,25 @@ function RecipeFetcher() {
   useEffect(() => {
     generateRecipe();
   }, [difficulty, ingredients, regenTrigger]);
-  
+
   const handleRegenerate = () => {
     setRegenTrigger((prev) => prev + 1);
   };
-  
+
   return (
     <div className={styles.generatedRecipePageContainer}>
       {recipeJson ? (
-        <Recipe recipeJson={recipeJson} />
+        <>
+          <Recipe recipeJson={recipeJson} />
+          <div className={styles.regenerateButtonContainer}>
+            <button
+              onClick={handleRegenerate}
+              className={styles.regenerateButton}
+            >
+              Regenerate Recipe
+            </button>
+          </div>
+        </>
       ) : (
         <Mosaic color="#32cd32" size="medium" text="" textColor="" />
       )}
