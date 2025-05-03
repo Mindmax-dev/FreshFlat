@@ -24,28 +24,32 @@ function RecipeFetcher() {
 
   const [regenTrigger, setRegenTrigger] = useState(0);
 
+  //useEffect(() => {
+  const generateRecipe = async () => {
+    try {
+      const response = await fetch('/api/recipe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ingredients, difficulty }),
+      });
+
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      const recipeGenerationResponse = await response.json();
+      setRecipeJson(JSON.parse(recipeGenerationResponse));
+    } catch (error) {
+      console.error('Error fetching recipe:', error);
+      setRecipeJson(null);
+    }
+  };
   useEffect(() => {
-    const generateRecipe = async () => {
-      try {
-        const response = await fetch('/api/recipe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ingredients, difficulty }),
-        });
-
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-        const recipeGenerationResponse = await response.json();
-        setRecipeJson(JSON.parse(recipeGenerationResponse));
-      } catch (error) {
-        console.error('Error fetching recipe:', error);
-        setRecipeJson(null);
-      }
-    };
-
     generateRecipe();
-  }, [difficulty, ingredients]);
-
+  }, [difficulty, ingredients, regenTrigger]);
+  
+  const handleRegenerate = () => {
+    setRegenTrigger((prev) => prev + 1);
+  };
+  
   return (
     <div className={styles.generatedRecipePageContainer}>
       {recipeJson ? (
