@@ -4,19 +4,27 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import styles from './styles.module.css';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import freshFlatLogo from '@/utils/images/freshFlatLogo.png';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  const navItems = [
+    { name: 'Pantry', path: '/' },
+    { name: 'Recipes', path: '/recipe/selectIngredients' },
+    { name: 'Account', path: '/account' },
+    { name: 'Flat', path: '/flat' },
+  ];
 
   return (
     <header className={styles.header}>
       <div className={styles.logo} onClick={() => router.push('/')}>
         <Image
           src={freshFlatLogo}
-          alt="Description of image"
+          alt="FreshFlat Logo"
           width={75}
           height={75}
         />
@@ -25,27 +33,17 @@ export default function Header() {
         {isOpen ? <X /> : <Menu />}
       </div>
       <nav className={`${styles.navButtons} ${isOpen ? styles.open : ''}`}>
-        <button className={styles.navButton} onClick={() => router.push('/')}>
-          Pantry
-        </button>
-        <button
-          className={styles.navButton}
-          onClick={() => router.push('/recipe/selectIngredients')}
-        >
-          Recipes
-        </button>
-        <button
-          className={styles.navButton}
-          onClick={() => router.push('/account')}
-        >
-          Account
-        </button>
-        <button
-          className={styles.navButton}
-          onClick={() => router.push('/flat')}
-        >
-          Flat
-        </button>
+        {navItems.map((item) => (
+          <button
+            key={item.path}
+            className={`${styles.navButton} ${
+              pathname === item.path ? styles.navButtonActive : ''
+            }`}
+            onClick={() => router.push(item.path)}
+          >
+            {item.name}
+          </button>
+        ))}
       </nav>
     </header>
   );

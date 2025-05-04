@@ -43,6 +43,11 @@
   font-size: 1rem;
 }
 
+.navButtonActive {
+  background-color: var(--mainHoverColor);
+  font-weight: bold;
+}
+
 .navButton:hover {
   background-color: var(--mainHoverColor);
 }
