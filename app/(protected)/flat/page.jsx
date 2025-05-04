@@ -5,6 +5,26 @@ export default async function FlatPage() {
   const flat = await getFlatOfUserController();
   console.log(flat);
 
+  async function handleTransferAdmin(newAdmin) {
+    try {
+      const response = await fetch('/api/transfer-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newAdmin }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to transfer admin rights');
+      }
+
+      const result = await response.json();
+      console.log('Admin rights transferred successfully:', result);
+    } catch (error) {
+      console.error('Error transferring admin rights:', error);
+    }
+  }
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>🏡Flatname: {flat.name}</h1>
