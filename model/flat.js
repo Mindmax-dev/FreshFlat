@@ -97,11 +97,11 @@ export async function addFlatmateToFlat(flatId, userId) {
 //   return { error };
 // }
 
-// export async function transferAdminPrivileges(flatId, newAdminId) {
-//   const supabase = createClient();
-//   const { error } = await supabase
-//     .from('flats')
-//     .update({ admin_id: newAdminId })
-//     .eq('id', flatId);
-//   return { error };
-// }
+export async function transferAdminPrivileges(flatId, newAdminId) {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('flats')
+    .update({ admin_id: newAdminId })
+    .eq('id', flatId);
+  return { error };
+}
