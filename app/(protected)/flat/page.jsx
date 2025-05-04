@@ -27,10 +27,10 @@ export default async function FlatPage() {
   }
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>🏡Flatname: {flat.name}</h1>
+      <h1 className={styles.title}>Flatname: {flat.name}</h1>
 
       <div className={styles.section}>
-        <h2>👥 Members:</h2>
+        <h2>Members:</h2>
 
         <ul className={styles.memberList}>
           {flat.members.map((user) => (
@@ -40,7 +40,7 @@ export default async function FlatPage() {
       </div>
 
       <p className={styles.admin}>
-        ⭐ <strong>Admin:</strong> {flat.admin}
+        <strong>Admin:</strong> {flat.admin}
       </p>
       <p>
         <strong>Invite Token:</strong>{' '}
