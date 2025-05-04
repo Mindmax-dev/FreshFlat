@@ -12,7 +12,7 @@ export default async function FlatPage() {
       <div className={styles.section}>
         <h2>👥 Members:</h2>
 
-        <ul>
+        <ul className={styles.memberList}>
           {flat.members.map((user) => (
             <li key={user}>{user}</li>
           ))}
