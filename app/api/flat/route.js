@@ -1,53 +1,27 @@
-import { addFlatmateToFlat, createFlat } from '@/model/flat';
-import { createClient } from '@/utils/supabase/server';
+import { editFlatController, deleteFlatController } from '@/controller/flat';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   try {
-    const body = await req.json();
+    const formData = await req.formData();
+    const action = formData.get('action');
+    const flatId = formData.get('flatId');
 
-    const supabase = await createClient();
-    const userId = (await supabase.auth.getUser()).data.user.id;
+    // Construct absolute URL using the request host
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host');
+    const baseUrl = `${protocol}://${host}`;
 
-    const { flat, error } = await createFlat(body.flatName, userId);
-
-    if (error) {
-      return NextResponse.json(
-        { error: 'Error creating flat' },
-        { status: 400 }
-      );
+    if (action === 'edit') {
+      return NextResponse.redirect(`${baseUrl}/flat/edit/${flatId}`, { status: 303 });
+    } else if (action === 'delete') {
+      await deleteFlatController(flatId);
+      return NextResponse.redirect(`${baseUrl}/`, { status: 303 });
+    } else {
+      return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
     }
-
-    return NextResponse.json(
-      { message: 'Flat created successfully', flat },
-      { status: 200 }
-    );
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Error handling POST request' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function PUT(req) {
-  const body = await req.json();
-  const supabase = await createClient();
-  const userId = (await supabase.auth.getUser()).data.user.id;
-
-  try {
-    const { error } = await addFlatmateToFlat(body.flatCode, userId);
-    if (error) {
-      return NextResponse.json(
-        { error: 'Error joining flat' },
-        { status: 400 }
-      );
-    }
-    return NextResponse.json(
-      { message: 'Joined flat successfully' },
-      { status: 200 }
-    );
-  } catch (error) {
-    return NextResponse.json({ error: 'Error joining flat' }, { status: 400 });
+    console.error('Error processing flat action:', error.message);
+    return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });
   }
 }

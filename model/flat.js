@@ -1,21 +1,24 @@
-// flats.js
-import { createClient } from '@/utils/supabase/server';
+const { createClient } = require('@/utils/supabase/server');
 
-export async function getFlatOfUser() {
+async function getFlatOfUser() {
   const supabase = await createClient();
   const userId = (await supabase.auth.getUser()).data.user.id;
   const flatIdOfUser = await supabase
     .from('flats_have_users')
     .select('flat')
     .eq('user', userId);
+  if (!flatIdOfUser.data || flatIdOfUser.data.length === 0) {
+    return { flat: null, error: 'User is not associated with any flat' };
+  }
   const flat = await supabase
     .from('flats')
     .select('*')
-    .eq('id', flatIdOfUser.data[0].flat);
+    .eq('id', flatIdOfUser.data[0].flat)
+    .single(); // Use .single() to get a single record
 
-  const flatAdminId = flat.data[0].admin;
-  const flatInviteToken = flat.data[0].id;
-  const flatName = flat.data[0].name;
+  const flatAdminId = flat.data.admin;
+  const flatId = flat.data.id;
+  const flatName = flat.data.name;
 
   const flatMembers = await supabase
     .from('flats_have_users')
@@ -25,7 +28,8 @@ export async function getFlatOfUser() {
   const flatMembersId = flatMembers.data.map((member) => member.user);
 
   const flatObject = {
-    inviteToken: flatInviteToken,
+    id: flatId,
+    inviteToken: flatId,
     admin: flatAdminId,
     name: flatName,
     members: flatMembersId,
@@ -34,7 +38,7 @@ export async function getFlatOfUser() {
   return { flat: flatObject, error: flat.error };
 }
 
-export async function createFlat(name, adminId) {
+async function createFlat(name, adminId) {
   const supabase = await createClient();
   const { data: flat, error } = await supabase
     .from('flats')
@@ -49,7 +53,7 @@ export async function createFlat(name, adminId) {
   return { flat, error };
 }
 
-export async function addFlatmateToFlat(flatId, userId) {
+async function addFlatmateToFlat(flatId, userId) {
   const supabase = await createClient();
   const { error } = await supabase
     .from('flats_have_users')
@@ -57,51 +61,48 @@ export async function addFlatmateToFlat(flatId, userId) {
   return { error };
 }
 
-// export async function getFlats() {
-//   const supabase = createClient();
-//   const { data: flats, error } = await supabase.from('flats').select('*');
-//   return { flats, error };
-// }
+async function updateFlat(flatId, updateData) {
+  const supabase = await createClient();
+  const { data: updatedFlat, error } = await supabase
+    .from('flats')
+    .update(updateData)
+    .eq('id', flatId)
+    .select()
+    .single(); // Use .single() to get a single updated record
+  return { updatedFlat, error };
+}
 
-// export async function getFlatById(flatId) {
-//   const supabase = createClient();
-//   const { data: flat, error } = await supabase
-//     .from('flats')
-//     .select('*')
-//     .eq('id', flatId);
-//   return { flat, error };
-// }
+async function deleteFlat(flatId) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('flats').delete().eq('id', flatId);
+  return { error };
+}
 
-// export async function updateFlat(flatId, updateData) {
-//   const supabase = createClient();
-//   const { data: updatedFlat, error } = await supabase
-//     .from('flats')
-//     .update(updateData)
-//     .eq('id', flatId);
-//   return { updatedFlat, error };
-// }
+async function getFlatById(flatId) {
+  const supabase = await createClient();
+  const { data: flat, error } = await supabase
+    .from('flats')
+    .select('*')
+    .eq('id', flatId)
+    .single(); // Use .single() to get a single record
+  if (error) {
+    return { flat: null, error };
+  }
+  const flatObject = {
+    id: flat.id,
+    inviteToken: flat.id,
+    admin: flat.admin,
+    name: flat.name,
+    members: [], // Populate this if needed from flats_have_users
+  };
+  return { flat: flatObject, error: null };
+}
 
-// export async function deleteFlat(flatId) {
-//   const supabase = createClient();
-//   const { error } = await supabase.from('flats').delete().eq('id', flatId);
-//   return { error };
-// }
-
-// export async function removeFlatmateFromFlat(flatId, userId) {
-//   const supabase = createClient();
-//   const { error } = await supabase
-//     .from('flats_have_users')
-//     .delete()
-//     .eq('flat', flatId)
-//     .eq('user', userId);
-//   return { error };
-// }
-
-// export async function transferAdminPrivileges(flatId, newAdminId) {
-//   const supabase = createClient();
-//   const { error } = await supabase
-//     .from('flats')
-//     .update({ admin_id: newAdminId })
-//     .eq('id', flatId);
-//   return { error };
-// }
+module.exports = {
+  getFlatOfUser,
+  createFlat,
+  addFlatmateToFlat,
+  updateFlat,
+  deleteFlat,
+  getFlatById,
+};
