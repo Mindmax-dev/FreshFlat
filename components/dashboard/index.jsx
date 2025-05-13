@@ -27,6 +27,7 @@ export default function Dashboard({ pantryIngredients, user }) {
 
   const [nameFilter, setNameFilter] = useState('');
   const [ingredientSearchFilter, setIngredientSearchFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState(null);
   const [editingIngredient, setEditingIngredient] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
@@ -144,9 +145,22 @@ export default function Dashboard({ pantryIngredients, user }) {
     setIngredientSearchFilter(e.target.value.toLowerCase());
   };
 
+  const handleDateFilterChange = (e) => {
+    if (e.target.value === '') {
+      setDateFilter(null);
+      return;
+    }
+
+    setDateFilter(e.target.value);
+  };
+
   const ingredientElements = ingredients
     .filter((ingredient) => {
-      if (!ingredient.user.name === nameFilter) {
+      if (nameFilter !== '' && ingredient.user.name !== nameFilter) {
+        return false;
+      }
+
+      if (dateFilter !== null && ingredient.expiry_date !== dateFilter) {
         return false;
       }
 
@@ -187,7 +201,33 @@ export default function Dashboard({ pantryIngredients, user }) {
 
   return (
     <div className={styles.container}>
-      <span>
+      <div className={styles.filtersContainer}>
+        <span className={styles.nameFilterContainer}>
+          <label htmlFor="nameFilter">Name Filter</label>
+          <select
+            name="nameFilter"
+            id="nameFilter"
+            onChange={handleNameFilterChange}
+          >
+            {nameSelectOptionElements}
+          </select>
+        </span>
+        <span className={styles.dateFilterContainer}>
+          <label htmlFor="dateFilter">Date Filter</label>
+          <input
+            name="dateFilter"
+            type="date"
+            onChange={handleDateFilterChange}
+          />
+        </span>
+        <input
+          className={styles.searchBox}
+          type="search"
+          onChange={handleSearchboxChange}
+          placeholder="Search ingredient..."
+        />
+      </div>
+      {/* <span className={styles.nameFilterContainer}>
         <label htmlFor="nameFilter">Name Filter</label>
         <select
           name="nameFilter"
@@ -197,12 +237,20 @@ export default function Dashboard({ pantryIngredients, user }) {
           {nameSelectOptionElements}
         </select>
       </span>
+      <span className={styles.dateFilterContainer}>
+        <label htmlFor="dateFilter">Date Filter</label>
+        <input
+          name="dateFilter"
+          type="date"
+          onChange={handleDateFilterChange}
+        />
+      </span>
       <input
         className={styles.searchBox}
         type="search"
         onChange={handleSearchboxChange}
         placeholder="Search ingredient..."
-      />
+      /> */}
       <table className={styles.table}>
         <thead>
           <tr>

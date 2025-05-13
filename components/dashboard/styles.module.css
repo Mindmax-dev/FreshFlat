@@ -87,9 +87,17 @@
   margin-top: 10px;
 }
 
-.searchBox {
-  float: right;
-  margin-bottom: 1rem;
-  padding: 0.25rem;
+.filtersContainer {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.filtersContainer * {
   font-size: 1rem;
+}
+
+.dateFilterContainer * {
+  height: 100%;
 }
