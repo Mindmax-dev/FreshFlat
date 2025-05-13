@@ -11,6 +11,21 @@ export default function Dashboard({ pantryIngredients, user }) {
     ...ingredient,
     id: index,
   }));
+
+  const names = [...new Set(pantryIngredients.map((ing) => ing.user.name))];
+
+  const nameSelectOptionElements = names.map((name) => {
+    return (
+      <option key={'option-' + name} id={name} value={name}>
+        {name}
+      </option>
+    );
+  });
+  nameSelectOptionElements.unshift(
+    <option key="option-default" id="default" value=""></option>
+  );
+
+  const [nameFilter, setNameFilter] = useState('');
   const [ingredientSearchFilter, setIngredientSearchFilter] = useState('');
   const [editingIngredient, setEditingIngredient] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -121,16 +136,23 @@ export default function Dashboard({ pantryIngredients, user }) {
     });
   };
 
+  const handleNameFilterChange = (e) => {
+    setNameFilter(e.target.value);
+  };
+
   const handleSearchboxChange = (e) => {
-    setIngredientSearchFilter(e.target.value);
+    setIngredientSearchFilter(e.target.value.toLowerCase());
   };
 
   const ingredientElements = ingredients
     .filter((ingredient) => {
-      if (ingredientSearchFilter === '') {
-        return true;
+      if (!ingredient.user.name === nameFilter) {
+        return false;
       }
-      return ingredient.ingredient.includes(ingredientSearchFilter, 0);
+
+      return ingredient.ingredient
+        .toLowerCase()
+        .includes(ingredientSearchFilter, 0);
     })
     .map((ingredient) => (
       <tr key={ingredient.id}>
@@ -165,6 +187,16 @@ export default function Dashboard({ pantryIngredients, user }) {
 
   return (
     <div className={styles.container}>
+      <span>
+        <label htmlFor="nameFilter">Name Filter</label>
+        <select
+          name="nameFilter"
+          id="nameFilter"
+          onChange={handleNameFilterChange}
+        >
+          {nameSelectOptionElements}
+        </select>
+      </span>
       <input
         className={styles.searchBox}
         type="search"
