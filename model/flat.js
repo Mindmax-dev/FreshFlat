@@ -1,7 +1,7 @@
-const { createClient } = require('@/utils/supabase/server');
+import { createAdminClient } from '@/utils/supabase/admin';
 
 async function getFlatOfUser() {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
   const userId = (await supabase.auth.getUser()).data.user.id;
   const flatIdOfUser = await supabase
     .from('flats_have_users')
@@ -14,18 +14,20 @@ async function getFlatOfUser() {
     .from('flats')
     .select('*')
     .eq('id', flatIdOfUser.data[0].flat)
-    .single(); // Use .single() to get a single record
+    .single();
+  if (flat.error) {
+    return { flat: null, error: flat.error.message };
+  }
 
   const flatAdminId = flat.data.admin;
   const flatId = flat.data.id;
   const flatName = flat.data.name;
 
-  const flatMembers = await supabase
+  const flatMembersResult = await supabase
     .from('flats_have_users')
     .select('user')
-    .eq('flat', flatIdOfUser.data[0].flat);
-
-  const flatMembersId = flatMembers.data.map((member) => member.user);
+    .eq('flat', flatId);
+  const flatMembersId = flatMembersResult.data.map((member) => member.user);
 
   const flatObject = {
     id: flatId,
@@ -39,7 +41,7 @@ async function getFlatOfUser() {
 }
 
 async function createFlat(name, adminId) {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
   const { data: flat, error } = await supabase
     .from('flats')
     .insert({
@@ -48,13 +50,15 @@ async function createFlat(name, adminId) {
     })
     .select();
 
-  await addFlatmateToFlat(flat[0].id, adminId);
+  if (flat && flat.length > 0) {
+    await addFlatmateToFlat(flat[0].id, adminId);
+  }
 
-  return { flat, error };
+  return { flat: flat?.[0] || null, error };
 }
 
 async function addFlatmateToFlat(flatId, userId) {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
   const { error } = await supabase
     .from('flats_have_users')
     .insert({ flat: flatId, user: userId });
@@ -62,29 +66,29 @@ async function addFlatmateToFlat(flatId, userId) {
 }
 
 async function updateFlat(flatId, updateData) {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
   const { data: updatedFlat, error } = await supabase
     .from('flats')
     .update(updateData)
     .eq('id', flatId)
     .select()
-    .single(); // Use .single() to get a single updated record
+    .single();
   return { updatedFlat, error };
 }
 
-async function deleteFlat(flatId) {
-  const supabase = await createClient();
+export async function deleteFlat(flatId) {
+  const supabase = await createAdminClient();
   const { error } = await supabase.from('flats').delete().eq('id', flatId);
   return { error };
 }
 
 async function getFlatById(flatId) {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
   const { data: flat, error } = await supabase
     .from('flats')
     .select('*')
     .eq('id', flatId)
-    .single(); // Use .single() to get a single record
+    .single();
   if (error) {
     return { flat: null, error };
   }
@@ -98,11 +102,23 @@ async function getFlatById(flatId) {
   return { flat: flatObject, error: null };
 }
 
-module.exports = {
-  getFlatOfUser,
-  createFlat,
+async function removeFlatmate(flatId, userId) {
+  const supabase = await createAdminClient();
+  const { error } = await supabase
+    .from('flats_have_users')
+    .delete()
+    .eq('flat', flatId)
+    .eq('user', userId);
+  if (error) {
+    return { error: error.message };
+  }
+  return { error: null };
+}
+
+export {
   addFlatmateToFlat,
-  updateFlat,
-  deleteFlat,
+  createFlat,
   getFlatById,
+  getFlatOfUser, removeFlatmate, updateFlat
 };
+

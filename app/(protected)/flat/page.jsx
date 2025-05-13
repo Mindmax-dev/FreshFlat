@@ -1,11 +1,81 @@
-import { getFlatOfUserController } from '@/controller/flat';
+'use client';
 
-export default async function FlatPage() {
-  const flatData = await getFlatOfUserController();
-  if (!flatData) return <div>No flat data found</div>;
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+export default function FlatPage() {
+  const router = useRouter();
+  const [flatData, setFlatData] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        console.log('Fetching flat data...');
+        const res = await fetch('/api/flat');
+        const data = await res.json();
+        console.log('API Response:', data);
+
+        if (!res.ok) {
+          setMessage(data.error || 'Failed to fetch flat data');
+          return;
+        }
+
+        setFlatData(data.flat);
+        console.log('Flat Data:', data.flat);
+
+        // Fetch user ID from Supabase client-side
+        const { createClient } = await import('@/utils/supabase/client');
+        const supabase = createClient();
+        const userResponse = await supabase.auth.getUser();
+        console.log('User Response:', userResponse);
+
+        if (!userResponse.data.user) {
+          setMessage('Please log in to continue');
+          router.push('/login');
+          return;
+        }
+        setUserId(userResponse.data.user.id);
+      } catch (error) {
+        console.error('Error fetching flat data:', error);
+        setMessage('An error occurred while fetching flat data');
+      }
+    }
+
+    fetchData();
+  }, [router]);
+
+  const handleLeaveFlat = async () => {
+    if (!userId || !flatData) return;
+    setMessage('');
+
+    try {
+      const res = await fetch('/api/flat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'leave',
+          flatId: flatData.id,
+          userId,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage(data.message || 'Successfully left the flat');
+        router.push('/create-join-flat');
+      } else {
+        setMessage(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      setMessage(`Error: ${error.message}`);
+    }
+  };
+
+  if (!flatData) return <div>{message || 'Loading...'}</div>;
 
   return (
-    <div>
+    <div className="container">
       <h1>Flatname: {flatData.name}</h1>
       <p>Members:</p>
       <ul>
@@ -25,6 +95,10 @@ export default async function FlatPage() {
           <button type="submit">Delete</button>
         </form>
       </div>
+      {message && <p>{message}</p>}
+      <button className="button" onClick={handleLeaveFlat}>
+        Leave Flat
+      </button>
     </div>
   );
 }
