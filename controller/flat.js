@@ -4,86 +4,99 @@ const {
   getFlatById,
   updateFlat,
   deleteFlat,
-  getFlatOfUser,
+  removeFlatmate,
 } = require('@/model/flat');
+import { createAdminClient } from '@/utils/supabase/admin';
 
 export async function getFlatOfUserController() {
-  const { flat, error } = await getFlatOfUser();
+  const supabase = await createAdminClient();
+  const userResponse = await supabase.auth.getUser();
+  if (!userResponse.data.user) {
+    return { flat: null, error: 'User not authenticated' };
+  }
+
+  const userId = userResponse.data.user.id;
+  const { data: flatIdData, error: flatIdError } = await supabase
+    .from('flats_have_users')
+    .select('flat')
+    .eq('user', userId)
+    .single();
+
+  if (flatIdError || !flatIdData) {
+    return { flat: null, error: 'Flat not found' };
+  }
+
+  const { data: flatData, error: flatError } = await supabase
+    .from('flats')
+    .select('*')
+    .eq('id', flatIdData.flat)
+    .single();
+
+  if (flatError || !flatData) {
+    return { flat: null, error: 'Flat not found' };
+  }
+
+  const { data: membersData, error: membersError } = await supabase
+    .from('flats_have_users')
+    .select('user')
+    .eq('flat', flatIdData.flat);
+
+  if (membersError) {
+    return { flat: null, error: 'Failed to fetch members' };
+  }
+
+  return {
+    flat: {
+      id: flatData.id,
+      name: flatData.name,
+      admin: flatData.admin,
+      inviteToken: flatData.inviteToken,
+      members: membersData.map((member) => member.user),
+    },
+    error: null,
+  };
+}
+
+export async function editFlatController(flatId, updatedData) {
+  const { updatedFlat, error } = await updateFlat(flatId, updatedData);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return updatedFlat;
+}
+
+
+export async function deleteFlatController(flatId) {
+  try {
+    const { error } = await deleteFlat(flatId);
+    if (error) {
+      return { error };
+    }
+    return { error: null };
+  } catch (err) {
+    console.error('Error in deleteFlatController:', err);
+    return { error: err };
+  }
+}
+
+export async function getFlatByIdController(flatId) {
+  const { flat, error } = await getFlatById(flatId);
   if (error) {
     return null;
   }
   return flat;
 }
 
-// export async function getFlatsController(req, res) {
-//   try {
-//     const { flats, error } = await getFlats();
-//     if (error) {
-//       return new Response(JSON.stringify({ error: error.message }), {
-//         status: 400,
-//       });
-//     }
-//     return new Response(JSON.stringify(flats), { status: 200 });
-//   } catch (error) {
-//     return new Response(
-//       JSON.stringify({ error: 'An error occurred while fetching flats' }),
-//       { status: 500 }
-//     );
-//   }
-// }
-// export async function getFlatByIdController(req, res) {
-//   try {
-//     const { id } = req.params;
-//     const { flat, error } = await getFlatById(id);
-//     if (error) {
-//       return new Response(JSON.stringify({ error: error.message }), {
-//         status: 400,
-//       });
-//     }
-//     return new Response(JSON.stringify(flat), { status: 200 });
-//   } catch (error) {
-//     return new Response(
-//       JSON.stringify({ error: 'An error occurred while fetching the flat' }),
-//       { status: 500 }
-//     );
-//   }
-// }
+export async function leaveFlatController(flatId, userId) {
+  const { flat, error: flatError } = await getFlatById(flatId);
+  if (flatError || !flat) {
+    throw { message: 'Flat not found' };
+  }
 
-// export async function updateFlatController(req, res) {
-//   try {
-//     const { id } = req.params;
-//     const updateData = req.json();
-//     const { updatedFlat, error } = await updateFlat(id, updateData);
-//     if (error) {
-//       return new Response(JSON.stringify({ error: error.message }), {
-//         status: 400,
-//       });
-//     }
-//     return new Response(JSON.stringify(updatedFlat), { status: 200 });
-//   } catch (error) {
-//     return new Response(
-//       JSON.stringify({ error: 'An error occurred while updating the flat' }),
-//       { status: 500 }
-//     );
-//   }
-// }
-// export async function deleteFlatController(req, res) {
-//   try {
-//     const { id } = req.params;
-//     const { error } = await deleteFlat(id);
-//     if (error) {
-//       return new Response(JSON.stringify({ error: error.message }), {
-//         status: 400,
-//       });
-//     }
-//     return new Response(
-//       JSON.stringify({ message: 'Flat deleted successfully' }),
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     return new Response(
-//       JSON.stringify({ error: 'An error occurred while deleting the flat' }),
-//       { status: 500 }
-//     );
-//   }
-// }
+  const { error } = await removeFlatmate(flatId, userId);
+  if (error) {
+    throw { message: error.message };
+  }
+
+  return { message: 'Successfully left the flat' };
+}

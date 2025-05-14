@@ -8,31 +8,55 @@ export default function ChooseFlatPage() {
   const router = useRouter();
   const [flatName, setFlatName] = useState('');
   const [flatCode, setFlatCode] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleCreateFlat = async () => {
-    await fetch('/api/flat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ flatName }),
-    }).then(() => {
-      router.push('/');
-    });
+    setMessage('');
+    try {
+      const res = await fetch('/api/flat/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: flatName }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setMessage(`Flat created successfully! Invite Token: ${data.flat.inviteToken}`);
+        router.push('/'); // Redirect to home or another page
+      } else {
+        setMessage(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      setMessage(`Error: ${error.message}`);
+    }
   };
 
   const handleJoinFlat = async () => {
-    const res = await fetch('/api/flat', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ flatCode }),
-    });
-    if (res.ok) router.push('/');
-    // TODO: Handle errors
+    setMessage('');
+    try {
+      const res = await fetch('/api/flat/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inviteToken: flatCode }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setMessage('Successfully joined the flat!');
+        router.push('/'); // Redirect to home or another page
+      } else {
+        setMessage(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      setMessage(`Error: ${error.message}`);
+    }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.box}>
-        <div>CREATE FLAT</div>
+        <h2>CREATE FLAT</h2>
+        {message && <p>{message}</p>}
         <input
           className={styles.input}
           type="text"
@@ -41,11 +65,12 @@ export default function ChooseFlatPage() {
           onChange={(e) => setFlatName(e.target.value)}
         />
         <button className={styles.button} onClick={handleCreateFlat}>
-          Done
+          Create Flat
         </button>
       </div>
       <div className={styles.box}>
-        <div>JOIN FLAT</div>
+        <h2>JOIN FLAT</h2>
+        {message && <p>{message}</p>}
         <input
           className={styles.input}
           type="text"
@@ -54,7 +79,7 @@ export default function ChooseFlatPage() {
           onChange={(e) => setFlatCode(e.target.value)}
         />
         <button className={styles.button} onClick={handleJoinFlat}>
-          Done
+          Join Flat
         </button>
       </div>
     </div>
