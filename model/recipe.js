@@ -26,7 +26,7 @@ export async function generateRecipeWithAi(ingredients, difficulty) {
             text:
               'Generate me a recipe for one or two persons with the diffifculty:' +
               difficulty +
-              'You are only allowed to use the following ingredients and the maximum amount of them. You do not have to use all of the ingredients:' +
+              'You are only allowed to use the following ingredients and the maximum amount of them. Ensure the ingredient names that you include in your response are exactly as I provided. You do not have to use all of the ingredients:' +
               ingredients,
           },
         ],
@@ -170,15 +170,14 @@ export async function saveRecipeToDatabase(
     .select();
 
   if (saveRecipe.error) {
-    console.error('Error saving recipe:', error);
+    console.error('Error saving recipe:', saveRecipe.error);
     return null;
   }
 
   console.log('Recipe saved:', saveRecipe);
-
   const ingredientsData = ingredients.map((ingredient) => ({
     recipe: saveRecipe.data[0].id,
-    ingredient: ingredient.id,
+    ingredient: ingredient.name,
     amount: ingredient.amount,
     unit: ingredient.unit,
   }));

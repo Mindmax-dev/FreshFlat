@@ -19,6 +19,7 @@ export default function SelectIngredientsPage({ flatIngredients }) {
     const filteredIngredients = selectedIngredients.map(
       ({ created_by, expiry_date, selected, ...rest }) => rest
     );
+
     const query = new URLSearchParams({
       ingredients: JSON.stringify(filteredIngredients),
       difficulty,

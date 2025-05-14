@@ -11,6 +11,23 @@ export default function Dashboard({ pantryIngredients, user }) {
     ...ingredient,
     id: index,
   }));
+
+  const names = [...new Set(pantryIngredients.map((ing) => ing.user.name))];
+
+  const nameSelectOptionElements = names.map((name) => {
+    return (
+      <option key={'option-' + name} id={name} value={name}>
+        {name}
+      </option>
+    );
+  });
+  nameSelectOptionElements.unshift(
+    <option key="option-default" id="default" value=""></option>
+  );
+
+  const [nameFilter, setNameFilter] = useState('');
+  const [ingredientSearchFilter, setIngredientSearchFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState(null);
   const [editingIngredient, setEditingIngredient] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
@@ -120,8 +137,120 @@ export default function Dashboard({ pantryIngredients, user }) {
     });
   };
 
+  const handleNameFilterChange = (e) => {
+    setNameFilter(e.target.value);
+  };
+
+  const handleSearchboxChange = (e) => {
+    setIngredientSearchFilter(e.target.value.toLowerCase());
+  };
+
+  const handleDateFilterChange = (e) => {
+    if (e.target.value === '') {
+      setDateFilter(null);
+      return;
+    }
+
+    setDateFilter(e.target.value);
+  };
+
+  const ingredientElements = ingredients
+    .filter((ingredient) => {
+      if (nameFilter !== '' && ingredient.user.name !== nameFilter) {
+        return false;
+      }
+
+      if (dateFilter !== null && ingredient.expiry_date !== dateFilter) {
+        return false;
+      }
+
+      return ingredient.ingredient
+        .toLowerCase()
+        .includes(ingredientSearchFilter, 0);
+    })
+    .map((ingredient) => (
+      <tr key={ingredient.id}>
+        <td>
+          {ingredient.amount} {ingredient.unit}
+        </td>
+        <td>{ingredient.ingredient}</td>
+        <td>{ingredient.user.name}</td>
+        <td>{new Date(ingredient.expiry_date).toLocaleDateString('en-GB')}</td>
+        <td>
+          {ingredient.user.id === user.userId && (
+            <>
+              <button
+                className="editButton"
+                onClick={() => handleEdit(ingredient)}
+              >
+                Edit
+              </button>
+              <button
+                className="deleteButton"
+                onClick={() =>
+                  handleDelete(ingredient.ingredient, ingredient.expiry_date)
+                }
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </td>
+      </tr>
+    ));
+
   return (
     <div className={styles.container}>
+      <div className={styles.filtersContainer}>
+        <span className={styles.nameFilterContainer}>
+          <label htmlFor="nameFilter">Name Filter</label>
+          <select
+            name="nameFilter"
+            id="nameFilter"
+            onChange={handleNameFilterChange}
+          >
+            {nameSelectOptionElements}
+          </select>
+        </span>
+        <span className={styles.dateFilterContainer}>
+          <label htmlFor="dateFilter">Date Filter</label>
+          <input
+            name="dateFilter"
+            type="date"
+            onChange={handleDateFilterChange}
+          />
+        </span>
+        <input
+          className={styles.searchBox}
+          type="search"
+          onChange={handleSearchboxChange}
+          placeholder="Search ingredient..."
+        />
+      </div>
+      {/* <span className={styles.nameFilterContainer}>
+        <label htmlFor="nameFilter">Name Filter</label>
+        <select
+          name="nameFilter"
+          id="nameFilter"
+          onChange={handleNameFilterChange}
+        >
+          {nameSelectOptionElements}
+        </select>
+      </span>
+      <span className={styles.dateFilterContainer}>
+        <label htmlFor="dateFilter">Date Filter</label>
+        <input
+          name="dateFilter"
+          type="date"
+          onChange={handleDateFilterChange}
+        />
+      </span>
+      <input
+        className={styles.searchBox}
+        type="search"
+        onChange={handleSearchboxChange}
+        placeholder="Search ingredient..."
+      /> */}
       <table className={styles.table}>
         <thead>
           <tr>
@@ -132,43 +261,7 @@ export default function Dashboard({ pantryIngredients, user }) {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
-              <td>
-                {ingredient.amount} {ingredient.unit}
-              </td>
-              <td>{ingredient.ingredient}</td>
-              <td>{ingredient.user.name}</td>
-              <td>
-                {new Date(ingredient.expiry_date).toLocaleDateString('en-GB')}
-              </td>
-              <td>
-                {ingredient.user.id === user.userId && (
-                  <>
-                    <button
-                      className="editButton"
-                      onClick={() => handleEdit(ingredient)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="deleteButton"
-                      onClick={() =>
-                        handleDelete(
-                          ingredient.ingredient,
-                          ingredient.expiry_date
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{ingredientElements}</tbody>
       </table>
 
       <div className={styles.addButtonContainer}>
