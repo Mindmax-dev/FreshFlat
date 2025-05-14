@@ -1,4 +1,25 @@
 .generatedRecipePageContainer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.regenerateButtonContainer {
+  margin-top: 2rem;
+}
+
+.regenerateButton {
+  background-color: #077a07;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.regenerateButton:hover {
+  background-color: #74dd74;
 }
