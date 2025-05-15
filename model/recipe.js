@@ -115,7 +115,7 @@ export async function getAllRecipesOfFlatWithFilters(
   preparation_time,
   difficulty
 ) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('recipes')

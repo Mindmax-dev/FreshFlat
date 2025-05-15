@@ -1,5 +1,22 @@
-import { generateRecipeWithAi, saveRecipeToDatabase } from '@/model/recipe';
+import {
+  generateRecipeWithAi,
+  getAllRecipesOfFlatWithFilters,
+  saveRecipeToDatabase,
+} from '@/model/recipe';
 import { NextResponse } from 'next/server';
+
+export async function GET(request) {
+  // Returns all recipes from the database
+  const recipes = await getAllRecipesOfFlatWithFilters(
+    true,
+    '',
+    true,
+    true,
+    'easy'
+  );
+
+  return NextResponse.json(recipes, { status: 200 });
+}
 
 export async function POST(request) {
   const { ingredients, difficulty } = await request.json();

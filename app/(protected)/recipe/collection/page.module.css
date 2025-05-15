@@ -1,0 +1,26 @@
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.recipeTable {
+  width: 80%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.recipeTable th,
+.recipeTable td {
+  padding: 12px 16px;
+}
+
+.recipeTable thead {
+  font-weight: bold;
+}
+
+.recipeRow:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
