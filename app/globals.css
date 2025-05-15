@@ -57,18 +57,17 @@ button {
   border-color: var(--borderColor);
 }
 
-.whiteActionButton {
-  background-color: #fcfcfa;
-  color: black;
-  padding: 10px 14px;
+.actionButton {
+  background-color: #5cb85c;
+  color: white;
+  padding: 10px 16px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  max-width: 150px;
 }
 
-.whiteActionButton:hover {
-  background-color: lightgray;
+.actionButton:hover {
+  background-color: rgb(0, 173, 46);
 }
 
 .editButton {

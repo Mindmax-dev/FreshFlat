@@ -4,9 +4,6 @@ import Recipe from '@/components/recipe/recipe';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import { Mosaic } from 'react-loading-indicators';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import Recipe from '@/components/recipe/recipe';
 import RecipeSaveButton from '@/components/recipe/saveButton';
 import styles from './page.module.css';
 

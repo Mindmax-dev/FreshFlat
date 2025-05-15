@@ -265,10 +265,7 @@ export default function Dashboard({ pantryIngredients, user }) {
       </table>
 
       <div className={styles.addButtonContainer}>
-        <button
-          className={styles.addButton}
-          onClick={() => setShowAddModal(true)}
-        >
+        <button className="actionButton" onClick={() => setShowAddModal(true)}>
           Add Ingredient
         </button>
       </div>

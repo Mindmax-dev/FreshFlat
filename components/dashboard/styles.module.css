@@ -6,15 +6,6 @@
   text-align: right;
 }
 
-.addButton {
-  background-color: #5cb85c;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .modalOverlay {
   position: fixed;
   top: 0;

@@ -8,7 +8,10 @@ export default function RecipeCollectionPage() {
 
   return (
     <div>
-      <button onClick={() => router.push('/recipe/selectIngredients')}>
+      <button
+        className="actionButton"
+        onClick={() => router.push('/recipe/selectIngredients')}
+      >
         Generate Recipe
       </button>
     </div>

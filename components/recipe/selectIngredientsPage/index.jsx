@@ -53,8 +53,8 @@ export default function SelectIngredientsPage({ flatIngredients }) {
         </select>
       </div>
       <button
+        className="actionButton"
         style={{ marginTop: '20px' }}
-        className="whiteActionButton"
         onClick={handleGenerateRecipe}
       >
         Generate Recipe

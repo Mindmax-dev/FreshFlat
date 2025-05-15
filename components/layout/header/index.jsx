@@ -14,7 +14,7 @@ export default function Header() {
 
   const navItems = [
     { name: 'Pantry', path: '/' },
-    { name: 'Recipes', path: '/recipe/selectIngredients' },
+    { name: 'Recipes', path: '/recipe/collection' },
     { name: 'Account', path: '/account' },
     { name: 'Flat', path: '/flat' },
   ];
