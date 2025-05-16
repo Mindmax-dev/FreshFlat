@@ -83,7 +83,7 @@ export default function FlatPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ newAdmin }),
+        body: JSON.stringify({ flatId: flatData.id, newAdmin }),
       });
 
       if (!response.ok) {
