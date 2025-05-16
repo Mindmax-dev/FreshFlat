@@ -6,6 +6,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 1200px;
   margin: auto;
+  color: #000000;
 }
 
 .containerBox {
@@ -100,8 +101,8 @@
 }
 
 .icon {
-  margin-right: 8px; 
-  vertical-align: middle; 
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .adminBadge {
