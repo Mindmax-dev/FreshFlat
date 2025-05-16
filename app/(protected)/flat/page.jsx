@@ -76,12 +76,15 @@ export default function FlatPage() {
 
   async function handleTransferAdmin(newAdmin) {
     try {
-      const response = await fetch('/api/transfer-admin', {
+      const response = await fetch('/api/flat/transfer-admin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ flatId: flatData.id, newAdmin }),
+        body: JSON.stringify({
+          flatId: flatData.id,
+          newAdmin: newAdmin.id,
+        }),
       });
 
       if (!response.ok) {
