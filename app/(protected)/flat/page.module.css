@@ -1,23 +1,37 @@
 /* page.module.css */
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
+  background: #f6f7f8;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: auto;
 }
 
+.containerBox {
+  padding: 0.5rem;
+  background: #ecedef;
+  border-radius: 1rem;
+  /*box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);*/
+  margin: 0 auto;
+}
 .title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .subtitle {
-  font-size: 18px;
-  margin-bottom: 8px;
+  font-size: 17px;
+  margin-bottom: 10px;
+  line-height: 1.9;
 }
 
 .memberList {
   list-style: none;
+  font-size: 14px;
   padding: 0;
+  margin-bottom: 10px;
 }
 
 .inviteToken {
@@ -28,41 +42,76 @@
 }
 
 .actions {
-  margin-top: 16px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.deleteForm {
+  margin: 0;
 }
 
 .editBtn {
-  background-color: #facc15;
-  padding: 8px 12px;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
   text-decoration: none;
-  border-radius: 4px;
-  color: black;
-  font-weight: bold;
+  color: white;
 }
 
 .deleteBtn {
   background-color: #ef4444;
-  color: white;
-  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
 }
 
 .leaveBtn {
   background-color: #6b7280;
-  color: white;
-  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  margin-top: 12px;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
 }
 
 .message {
   margin-top: 16px;
   color: #dc2626;
+}
+
+.icon {
+  margin-right: 8px; 
+  vertical-align: middle; 
+}
+
+.adminBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #fef3c7;
+  color: #b45309;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
