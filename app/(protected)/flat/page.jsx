@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import styles from './page.module.css';
+import { FaUserFriends, FaUserPlus, FaEdit, FaTrashAlt, FaSignOutAlt, FaKey } from 'react-icons/fa';
 
 export default function FlatPage() {
   const router = useRouter();
@@ -95,28 +97,32 @@ export default function FlatPage() {
     }
   }
   return (
-    <div className="container">
-      <h1>Flatname: {flatData.name}</h1>
-      <p>Members:</p>
-      <ul>
+    <div className="styles.container">
+      <h1 className={styles.title}>Flatname: {flatData.name}</h1>
+      <p className={styles.subtitle}>Members:</p>
+      <ul className={styles.memberList}>
+        {/* Displaying members */}
         {flatData.members.map((user) => (
           <li key={user}>{user}</li>
         ))}
       </ul>
-      <p>Admin: {flatData.admin}</p>
-      <p>Invite Token: {flatData.inviteToken}</p>
-      <div>
+      <p className={styles.subtitle}>Admin: {flatData.admin}</p>
+      <p className={styles.inviteToken}>Invite Token: {flatData.inviteToken}</p>
+      
         {/* Edit Link */}
-        <a href={`/flat/edit/${flatData.id}`}>Edit</a>
+        <div className={styles.actions}>
+        <a className={styles.editBtn} href={`/flat/edit/${flatData.id}`}>Edit</a>
         {/* Delete Form */}
         <form action="/api/flat" method="POST">
           <input type="hidden" name="action" value="delete" />
           <input type="hidden" name="flatId" value={flatData.id} />
-          <button type="submit">Delete</button>
+          <button className={styles.deleteBtn} type="submit">Delete</button>
         </form>
       </div>
-      {message && <p>{message}</p>}
-      <button className="button" onClick={handleLeaveFlat}>
+
+      {message && <p className={styles.message}>{message}</p>}
+
+      <button className={styles.leaveBtn} onClick={handleLeaveFlat}>
         Leave Flat
       </button>
     </div>

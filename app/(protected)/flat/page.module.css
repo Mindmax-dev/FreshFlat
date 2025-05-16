@@ -1,83 +1,68 @@
 /* page.module.css */
 .container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 24px;
-  background-color: #fefefe;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: 'Segoe UI', sans-serif;
-  border: 1px solid #eee;
-}
-
-.memberList ul {
-  list-style-type: disc;
-  padding-left: 20px;
-  margin-bottom: 16px;
-}
-
-.admin p {
-  font-size: 15px;
-  margin: 8px 0;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #222;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.section {
-  margin-bottom: 20px;
-}
-
-.section h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #333;
+.subtitle {
+  font-size: 18px;
+  margin-bottom: 8px;
 }
 
 .memberList {
-  list-style-type: disc;
-  padding-left: 20px;
-  margin-bottom: 16px;
+  list-style: none;
+  padding: 0;
 }
 
-.memberList li {
-  background: #f9f9f9;
-  padding: 8px 12px;
-  margin-bottom: 6px;
-  border-radius: 6px;
+.inviteToken {
   font-family: monospace;
-  font-size: 14px;
-  word-break: break-word;
-  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
 
-.admin {
+.actions {
+  margin-top: 16px;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  color: #0c0101;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.token {
-  font-family: monospace;
-  background-color: #f3f4f6;
-  padding: 8px;
-  border-radius: 6px;
-  margin-top: 8px;
-  display: inline-block;
-  word-break: break-word;
-  border: 1px solid #ddd;
-  font-size: 14px;
+.editBtn {
+  background-color: #facc15;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 4px;
+  color: black;
+  font-weight: bold;
+}
+
+.deleteBtn {
+  background-color: #ef4444;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.leaveBtn {
+  background-color: #6b7280;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.message {
+  margin-top: 16px;
+  color: #dc2626;
 }
