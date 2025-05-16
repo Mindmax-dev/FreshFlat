@@ -126,7 +126,7 @@ export default function FlatPage() {
       <p className={styles.subtitle}>Admin: {flatData.admin.name}</p>
       <p className={styles.inviteToken}>
         <FaKey className={styles.icon} />
-        Invite Token: {flatData.inviteToken}
+        Invite Token: {flatData.id}
       </p>
 
       {/* Edit Link */}
