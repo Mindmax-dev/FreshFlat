@@ -111,7 +111,7 @@ export default function FlatPage() {
             <span>{user.name}</span>
             {user.id === flatData.admin.id && (
               <span className={styles.adminBadge}>
-                <FaCrown className={styles.crownIcon} /> Admin
+                <FaCrown className={styles.crownIcon} /> 
               </span>
             )}
             {user.id !== flatData.admin.id && (

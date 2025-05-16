@@ -35,6 +35,8 @@
   margin-bottom: 10px;
 }
 
+
+
 .inviteToken {
   font-family: monospace;
   background-color: #f5f5f5;
@@ -67,8 +69,12 @@
   color: white;
 }
 
+.editBtn:hover {
+  background-color: #127500; 
+  color: #ffffff; 
+}
 .deleteBtn {
-  background-color: #ef4444;
+  background-color: #000000;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -81,8 +87,13 @@
   color: white;
 }
 
+.deleteBtn:hover {
+  background-color: #127500; 
+  color: #ffffff;
+}
+
 .leaveBtn {
-  background-color: #6b7280;
+  background-color: #000000;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -93,11 +104,16 @@
   cursor: pointer;
   text-decoration: none;
   color: white;
+}
+
+.leaveBtn:hover {
+  background-color: #127500; 
+  color: #ffffff; 
 }
 
 .message {
   margin-top: 16px;
-  color: #dc2626;
+  color: #ef1212;
 }
 
 .icon {
@@ -108,11 +124,32 @@
 .adminBadge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
   background-color: #fef3c7;
   color: #b45309;
-  padding: 4px 8px;
-  border-radius: 9999px;
+  width: 32px; /* Set width for the circle */
+  height: 32px; /* Set height for the circle */
+  border-radius: 50%; /* Make it a circle */
   font-size: 0.85rem;
   font-weight: 600;
+}
+
+.transferAdminBtn {
+  background-color: #16723f;
+  display: flex;
+  gap: 0.25rem; /* reduced gap */
+  border: none;
+  border-radius: 0.25rem; /* smaller border radius */
+  padding: 0.25rem 0.5rem; /* reduced padding */
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 0.875rem; /* smaller font size */
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* space between name, badge, and button */
 }
