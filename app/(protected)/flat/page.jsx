@@ -65,7 +65,7 @@ export default function FlatPage() {
       const data = await res.json();
       if (res.ok) {
         setMessage(data.message || 'Successfully left the flat');
-        router.push('/create-join-flat');
+        router.push('/chooseFlat');
       } else {
         setMessage(`Error: ${data.error}`);
       }
