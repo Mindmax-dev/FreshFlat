@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { FaCrown, FaKey, FaUserFriends } from 'react-icons/fa';
 import styles from './page.module.css';
-import { FaUserFriends, FaUserPlus, FaEdit, FaTrashAlt, FaSignOutAlt, FaKey } from 'react-icons/fa';
 
 export default function FlatPage() {
   const router = useRouter();
@@ -97,34 +97,63 @@ export default function FlatPage() {
     }
   }
   return (
-    <div className="styles.container">
-      <h1 className={styles.title}>Flatname: {flatData.name}</h1>
-      <p className={styles.subtitle}>Members:</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Flat Name: {flatData.name}</h1>
+      <p className={styles.subtitle}>
+        <FaUserFriends className={styles.icon} />
+        Members:
+      </p>
       <ul className={styles.memberList}>
-        {/* Displaying members */}
-        {flatData.members.map((user) => (
-          <li key={user}>{user}</li>
+        {/* Displaying members individually */}
+        {flatData.members.map((user, index) => (
+          <li key={index} className={styles.memberItem}>
+            <span>{user}</span>
+            {user === flatData.admin && (
+              <span className={styles.adminBadge}>
+                <FaCrown className={styles.crownIcon} /> Admin
+              </span>
+            )}
+            {user !== flatData.admin && (
+              <button
+                className={styles.transferAdminBtn}
+                onClick={() => handleTransferAdmin(user)}
+              >
+                Transfer Admin
+              </button>
+            )}
+          </li>
         ))}
       </ul>
+
       <p className={styles.subtitle}>Admin: {flatData.admin}</p>
-      <p className={styles.inviteToken}>Invite Token: {flatData.inviteToken}</p>
-      
-        {/* Edit Link */}
-        <div className={styles.actions}>
-        <a className={styles.editBtn} href={`/flat/edit/${flatData.id}`}>Edit</a>
+      <p className={styles.inviteToken}>
+        <FaKey className={styles.icon} />
+        Invite Token: {flatData.inviteToken}
+      </p>
+
+      {/* Edit Link */}
+      <div className={styles.actions}>
+        <button
+          className={styles.editBtn}
+          onClick={() => router.push(`/flat/edit/${flatData.id}`)}
+        >
+          Edit Flat Name
+        </button>
         {/* Delete Form */}
-        <form action="/api/flat" method="POST">
+        <form action="/api/flat" method="POST" className={styles.deleteForm}>
           <input type="hidden" name="action" value="delete" />
           <input type="hidden" name="flatId" value={flatData.id} />
-          <button className={styles.deleteBtn} type="submit">Delete</button>
+          <button className={styles.deleteBtn} type="submit">
+            Delete Flat
+          </button>
         </form>
+
+        {message && <p className={styles.message}>{message}</p>}
+
+        <button className={styles.leaveBtn} onClick={handleLeaveFlat}>
+          Leave Flat
+        </button>
       </div>
-
-      {message && <p className={styles.message}>{message}</p>}
-
-      <button className={styles.leaveBtn} onClick={handleLeaveFlat}>
-        Leave Flat
-      </button>
     </div>
   );
 }
