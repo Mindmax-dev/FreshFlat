@@ -1,6 +1,4 @@
 const {
-  createFlat,
-  getFlats,
   getFlatById,
   updateFlat,
   deleteFlat,
@@ -36,6 +34,13 @@ export async function getFlatOfUserController() {
     return { flat: null, error: 'Flat not found' };
   }
 
+  // Get admin info from auth
+  const { data: adminUser, error: adminUserError } = await supabase.auth.admin.getUserById(flatData.admin);
+  if (adminUserError || !adminUser?.user) {
+    return { flat: null, error: 'Admin not found' };
+  }
+
+  // Get members' ids
   const { data: membersData, error: membersError } = await supabase
     .from('flats_have_users')
     .select('user')
@@ -45,13 +50,29 @@ export async function getFlatOfUserController() {
     return { flat: null, error: 'Failed to fetch members' };
   }
 
+  // Fetch member profiles from auth
+  const memberIds = membersData.map((m) => m.user);
+  const members = [];
+  for (const id of memberIds) {
+    const { data: memberUser, error: memberUserError } = await supabase.auth.admin.getUserById(id);
+    if (memberUser && memberUser.user) {
+      members.push({
+        id: memberUser.user.id,
+        name: memberUser.user.user_metadata?.full_name || memberUser.user.email,
+      });
+    }
+  }
+
   return {
     flat: {
       id: flatData.id,
       name: flatData.name,
-      admin: flatData.admin,
+      admin: {
+        id: adminUser.user.id,
+        name: adminUser.user.user_metadata?.full_name || adminUser.user.email,
+      },
       inviteToken: flatData.inviteToken,
-      members: membersData.map((member) => member.user),
+      members,
     },
     error: null,
   };
@@ -64,7 +85,6 @@ export async function editFlatController(flatId, updatedData) {
   }
   return updatedFlat;
 }
-
 
 export async function deleteFlatController(flatId) {
   try {

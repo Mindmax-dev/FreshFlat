@@ -14,10 +14,8 @@ export default function FlatPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log('Fetching flat data...');
         const res = await fetch('/api/flat');
         const data = await res.json();
-        console.log('API Response:', data);
 
         if (!res.ok) {
           setMessage(data.error || 'Failed to fetch flat data');
@@ -65,7 +63,7 @@ export default function FlatPage() {
       const data = await res.json();
       if (res.ok) {
         setMessage(data.message || 'Successfully left the flat');
-        router.push('/create-join-flat');
+        router.push('/chooseFlat');
       } else {
         setMessage(`Error: ${data.error}`);
       }
@@ -107,13 +105,13 @@ export default function FlatPage() {
         {/* Displaying members individually */}
         {flatData.members.map((user, index) => (
           <li key={index} className={styles.memberItem}>
-            <span>{user}</span>
-            {user === flatData.admin && (
+            <span>{user.name}</span>
+            {user.id === flatData.admin.id && (
               <span className={styles.adminBadge}>
                 <FaCrown className={styles.crownIcon} /> Admin
               </span>
             )}
-            {user !== flatData.admin && (
+            {user.id !== flatData.admin.id && (
               <button
                 className={styles.transferAdminBtn}
                 onClick={() => handleTransferAdmin(user)}
@@ -125,10 +123,10 @@ export default function FlatPage() {
         ))}
       </ul>
 
-      <p className={styles.subtitle}>Admin: {flatData.admin}</p>
+      <p className={styles.subtitle}>Admin: {flatData.admin.name}</p>
       <p className={styles.inviteToken}>
         <FaKey className={styles.icon} />
-        Invite Token: {flatData.inviteToken}
+        Invite Token: {flatData.id}
       </p>
 
       {/* Edit Link */}
