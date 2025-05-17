@@ -2,14 +2,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid black;
+  border: 2px solid black;
+  border-radius: 0.5rem;
   width: 55%;
-  margin: 2rem auto 0 auto;
-  padding: 1rem;
-}
-
-.container * {
-  border: 1px solid black;
+  margin: 2rem auto 1rem auto;
+  padding: 1rem 2rem;
+  background-color: rgb(100, 100, 100);
 }
 
 .recipeTitle {
@@ -39,14 +37,31 @@
   text-align: end;
 }
 
-.instructionTitle {
+.innerBlockTitle {
   margin: 0 0 1rem 2rem;
+  text-decoration: underline;
 }
 
-.instructions {
-  margin: 0 4rem;
+.innerBlock {
+  margin-bottom: 2rem;
+  padding: 0 3rem;
+  width: 100%;
 }
 
-.instruction {
+.innerBlockLine {
   margin: 0 1rem 1rem 1rem;
+}
+
+.lineBreak {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.recipeTitle,
+.innerBlockTitle,
+.innerBlockLine,
+.preparationTime,
+.cookingTime {
+  text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 }
