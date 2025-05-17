@@ -8,6 +8,8 @@ export default function RecipeCollectionPage() {
   const router = useRouter();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [titleFilter, setTitleFilter] = useState('');
+  const [difficultyFilter, setDifficultyFilter] = useState('');
 
   useEffect(() => {
     const getAllRecipes = async () => {
@@ -35,6 +37,14 @@ export default function RecipeCollectionPage() {
     getAllRecipes();
   }, []);
 
+  const handleTitleFilterChange = (e) => {
+    setTitleFilter(e.target.value);
+  };
+
+  const handleDifficultyFilterChange = (e) => {
+    setDifficultyFilter(e.target.value);
+  };
+
   return (
     <div className={styles.pageWrapper}>
       <button
@@ -43,7 +53,24 @@ export default function RecipeCollectionPage() {
       >
         Generate Recipe
       </button>
-
+      <span>
+        <label htmlFor="titleFilter">Search</label>
+        <input
+          name="titleFilter"
+          type="text"
+          placeholder="Search recipe..."
+          onChange={handleTitleFilterChange}
+        />
+      </span>
+      <span>
+        <label htmlFor="difficultyFilter">Difficulty</label>
+        <select name="difficultyFilter" onChange={handleDifficultyFilterChange}>
+          <option value=""></option>
+          <option value="easy">easy</option>
+          <option value="medium">medium</option>
+          <option value="hard">hard</option>
+        </select>
+      </span>
       {loading ? (
         <p>Loading recipes...</p>
       ) : recipes.length === 0 ? (
@@ -59,18 +86,28 @@ export default function RecipeCollectionPage() {
             </tr>
           </thead>
           <tbody>
-            {recipes.map((recipe) => (
-              <tr
-                key={recipe.id}
-                className={styles.recipeRow}
-                onClick={() => router.push('/recipe/recipeDisplay')}
-              >
-                <td>{recipe.title}</td>
-                <td>{recipe.difficulty}</td>
-                <td>{recipe.preparation_time} min</td>
-                <td>{recipe.cooking_time} min</td>
-              </tr>
-            ))}
+            {recipes
+              .filter(
+                (recipe) =>
+                  recipe.title
+                    .toLowerCase()
+                    .includes(titleFilter.toLowerCase()) &&
+                  recipe.difficulty
+                    .toLowerCase()
+                    .includes(difficultyFilter.toLowerCase())
+              )
+              .map((recipe) => (
+                <tr
+                  key={recipe.id}
+                  className={styles.recipeRow}
+                  onClick={() => router.push('/recipe/recipeDisplay')}
+                >
+                  <td>{recipe.title}</td>
+                  <td>{recipe.difficulty}</td>
+                  <td>{recipe.preparation_time} min</td>
+                  <td>{recipe.cooking_time} min</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       )}
