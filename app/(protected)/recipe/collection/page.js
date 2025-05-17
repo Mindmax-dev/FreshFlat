@@ -101,11 +101,7 @@ export default function RecipeCollectionPage() {
                   key={recipe.id}
                   className={styles.recipeRow}
                   onClick={() => {
-                    router.push(
-                      `/recipe/recipeDisplay?${new URLSearchParams({
-                        id: recipe.id,
-                      }).toString()}`
-                    );
+                    router.push(`/recipe/${recipe.id}`);
                   }}
                 >
                   <td>{recipe.title}</td>

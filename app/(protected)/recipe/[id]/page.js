@@ -1,18 +1,18 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-export default function RecipeDisplay() {
-  const searchParams = useSearchParams();
+export default function RecipeDisplay({ params }) {
   const [loading, setLoading] = useState(true);
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
     const getRecipe = async () => {
+      const { id } = await params;
+
       try {
-        const response = await fetch(`/api/recipe/${searchParams.get('id')}`, {
+        const response = await fetch(`/api/recipe/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export default function RecipeDisplay() {
     };
 
     getRecipe();
-  }, [searchParams]);
+  }, [params]);
 
   return loading ? (
     'Loading'
