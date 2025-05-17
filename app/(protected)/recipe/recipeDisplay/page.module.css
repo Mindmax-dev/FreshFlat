@@ -9,7 +9,7 @@
 }
 
 .container * {
-  border: 1px solid black;
+  /* border: 1px solid black; */
 }
 
 .recipeTitle {
@@ -39,14 +39,16 @@
   text-align: end;
 }
 
-.instructionTitle {
+.innerBlockTitle {
   margin: 0 0 1rem 2rem;
 }
 
-.instructions {
-  margin: 0 4rem;
+.innerBlock {
+  margin-bottom: 2rem;
+  padding: 0 3rem;
+  width: 100%;
 }
 
-.instruction {
+.innerBlockLine {
   margin: 0 1rem 1rem 1rem;
 }

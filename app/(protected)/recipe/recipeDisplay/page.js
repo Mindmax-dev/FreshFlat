@@ -47,13 +47,21 @@ export default function RecipeDisplay() {
         </p>
       </span>
       <p className={styles.difficulty}>Difficulty: {recipe.difficulty}</p>
-      <ol className={styles.instructions}>
-        <h2 className={styles.instructionTitle}>Instructions</h2>
+      <ul className={styles.innerBlock}>
+        <h2 className={styles.innerBlockTitle}>Ingredients</h2>
+        {recipe.recipes_have_ingredients.map((ingredient) => (
+          <li className={styles.innerBlockLine} key={ingredient.ingredient}>
+            {ingredient.amount + ingredient.unit + ' ' + ingredient.ingredient}
+          </li>
+        ))}
+      </ul>
+      <ol className={styles.innerBlock}>
+        <h2 className={styles.innerBlockTitle}>Instructions</h2>
         {recipe.instructions
           .split(/\d+\./) // split the instructions on each (number + '.')
           .filter(Boolean)
           .map((instruction, index) => (
-            <li className={styles.instruction} key={index}>
+            <li className={styles.innerBlockLine} key={index}>
               {instruction}
             </li>
           ))}
