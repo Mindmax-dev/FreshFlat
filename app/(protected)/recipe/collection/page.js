@@ -100,7 +100,17 @@ export default function RecipeCollectionPage() {
                 <tr
                   key={recipe.id}
                   className={styles.recipeRow}
-                  onClick={() => router.push('/recipe/recipeDisplay')}
+                  onClick={() => {
+                    router.push(
+                      `/recipe/recipeDisplay?${new URLSearchParams({
+                        title: recipe.title,
+                        instructions: recipe.instructions,
+                        difficulty: recipe.difficulty,
+                        preparation_time: recipe.preparation_time,
+                        cooking_time: recipe.cooking_time,
+                      }).toString()}`
+                    );
+                  }}
                 >
                   <td>{recipe.title}</td>
                   <td>{recipe.difficulty}</td>
