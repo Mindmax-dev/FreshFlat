@@ -93,6 +93,7 @@ export default function FlatPage() {
 
       const result = await response.json();
       console.log('Admin rights transferred successfully:', result);
+      window.location.reload();
     } catch (error) {
       console.error('Error transferring admin rights:', error);
     }
@@ -111,7 +112,7 @@ export default function FlatPage() {
             <span>{user.name}</span>
             {user.id === flatData.admin.id && (
               <span className={styles.adminBadge}>
-                <FaCrown className={styles.crownIcon} /> 
+                <FaCrown className={styles.crownIcon} />
               </span>
             )}
             {user.id !== flatData.admin.id && (
