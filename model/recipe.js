@@ -198,6 +198,25 @@ export async function saveRecipeToDatabase(
 export async function getRecipeByID(id) {
   const supabase = await createClient();
 
-  const user = await supabase.auth.getUser();
-  console.log('User ID:' + user.data.user.id);
+  // const user = await supabase.auth.getUser();
+  // console.log('USER ID: ' + user.data.user.id);
+
+  // if (user.error) {
+  //   console.error('Error fetching user: ', user.error);
+  //   return null;
+  // }
+
+  const { data, error } = await supabase
+    .from('recipes')
+    .select(
+      'title, instructions, preparation_time, cooking_time, difficulty, recipes_have_ingredients(ingredient, amount, unit) '
+    )
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error fetching recipe ID: ' + id + ': ', error);
+    return null;
+  }
+
+  return data[0];
 }
