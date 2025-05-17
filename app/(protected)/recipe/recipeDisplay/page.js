@@ -2,9 +2,12 @@
 import { useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
 import { useEffect } from 'react';
+import { useState } from 'react';
 
 export default function RecipeDisplay() {
   const searchParams = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
     const getRecipe = async () => {
@@ -15,6 +18,13 @@ export default function RecipeDisplay() {
             'Content-Type': 'application/json',
           },
         });
+
+        if (!response.ok) {
+          console.error('Failed to load recipe');
+          return;
+        }
+        setRecipe(await response.json());
+        setLoading(false);
       } catch (err) {
         console.error('Error fetching recipes:', err);
       }
@@ -23,5 +33,5 @@ export default function RecipeDisplay() {
     getRecipe();
   }, [searchParams]);
 
-  return <p>Hello</p>;
+  return <p>{loading ? 'Loading' : 'Not loading'}</p>;
 }
