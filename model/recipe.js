@@ -194,3 +194,10 @@ export async function saveRecipeToDatabase(
   // return the recipe id
   return saveRecipe.data[0].id;
 }
+
+export async function getRecipeByID(id) {
+  const supabase = await createClient();
+
+  const user = await supabase.auth.getUser();
+  console.log((userId = user.data.user.id));
+}
