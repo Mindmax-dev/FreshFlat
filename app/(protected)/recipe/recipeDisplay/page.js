@@ -33,5 +33,31 @@ export default function RecipeDisplay() {
     getRecipe();
   }, [searchParams]);
 
-  return <p>{loading ? 'Loading' : 'Not loading'}</p>;
+  return loading ? (
+    'Loading'
+  ) : (
+    <div className={styles.container}>
+      <h1 className={styles.recipeTitle}>{recipe.title}</h1>
+      <span className={styles.subTitleContainer}>
+        <p className={styles.preparationTime}>
+          Preparation time: {recipe.preparation_time} mins
+        </p>
+        <p className={styles.cookingTime}>
+          Cooking time: {recipe.cooking_time} mins
+        </p>
+      </span>
+      <p className={styles.difficulty}>Difficulty: {recipe.difficulty}</p>
+      <ol className={styles.instructions}>
+        <h2 className={styles.instructionTitle}>Instructions</h2>
+        {recipe.instructions
+          .split(/\d+\./) // split the instructions on each (number + '.')
+          .filter(Boolean)
+          .map((instruction, index) => (
+            <li className={styles.instruction} key={index}>
+              {instruction}
+            </li>
+          ))}
+      </ol>
+    </div>
+  );
 }
