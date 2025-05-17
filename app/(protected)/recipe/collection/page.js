@@ -103,11 +103,7 @@ export default function RecipeCollectionPage() {
                   onClick={() => {
                     router.push(
                       `/recipe/recipeDisplay?${new URLSearchParams({
-                        title: recipe.title,
-                        instructions: recipe.instructions,
-                        difficulty: recipe.difficulty,
-                        preparation_time: recipe.preparation_time,
-                        cooking_time: recipe.cooking_time,
+                        id: recipe.id,
                       }).toString()}`
                     );
                   }}

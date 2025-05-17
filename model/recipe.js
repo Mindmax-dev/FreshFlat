@@ -199,5 +199,5 @@ export async function getRecipeByID(id) {
   const supabase = await createClient();
 
   const user = await supabase.auth.getUser();
-  console.log((userId = user.data.user.id));
+  console.log('User ID:' + user.data.user.id);
 }
