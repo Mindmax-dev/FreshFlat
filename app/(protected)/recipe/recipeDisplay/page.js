@@ -47,6 +47,7 @@ export default function RecipeDisplay() {
         </p>
       </span>
       <p className={styles.difficulty}>Difficulty: {recipe.difficulty}</p>
+      <span className={styles.lineBreak}></span>
       <ul className={styles.innerBlock}>
         <h2 className={styles.innerBlockTitle}>Ingredients</h2>
         {recipe.recipes_have_ingredients.map((ingredient) => (
@@ -55,6 +56,7 @@ export default function RecipeDisplay() {
           </li>
         ))}
       </ul>
+      <span className={styles.lineBreak}></span>
       <ol className={styles.innerBlock}>
         <h2 className={styles.innerBlockTitle}>Instructions</h2>
         {recipe.instructions
