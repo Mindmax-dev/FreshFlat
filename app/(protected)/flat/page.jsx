@@ -115,14 +115,14 @@ export default function FlatPage() {
                 <FaCrown className={styles.crownIcon} />
               </span>
             )}
-            {user.id !== flatData.admin.id && (
+            {/* {user.id !== flatData.admin.id && (
               <button
                 className={styles.transferAdminBtn}
                 onClick={() => handleTransferAdmin(user)}
               >
                 Transfer Admin
               </button>
-            )}
+            )} */}
           </li>
         ))}
       </ul>

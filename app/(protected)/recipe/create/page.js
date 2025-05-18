@@ -56,7 +56,24 @@ function RecipeFetcher() {
       {recipeJson ? (
         <>
           <Recipe recipeJson={recipeJson} />
-          <RecipeSaveButton recipeJson={recipeJson} />
+
+          <div className={styles.buttonRow}>
+            <button
+              className={`${styles.regenerateButton} actionButton`}
+              onClick={handleRegenerate}
+            >
+              Regenerate Recipe
+            </button>
+            <button
+              className={`${styles.regenerateButton} actionButton`}
+              onClick={() => {
+                window.location.href = '/recipe/collection';
+              }}
+            >
+              Discard Recipe
+            </button>
+            <RecipeSaveButton recipeJson={recipeJson} />
+          </div>
         </>
       ) : (
         <Mosaic color="#32cd32" size="medium" text="" textColor="" />

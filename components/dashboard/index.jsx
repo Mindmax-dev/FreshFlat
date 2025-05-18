@@ -22,7 +22,9 @@ export default function Dashboard({ pantryIngredients, user }) {
     );
   });
   nameSelectOptionElements.unshift(
-    <option key="option-default" id="default" value=""></option>
+    <option key="option-default" id="default" value="">
+      Select...
+    </option>
   );
 
   const [nameFilter, setNameFilter] = useState('');
@@ -220,12 +222,15 @@ export default function Dashboard({ pantryIngredients, user }) {
             onChange={handleDateFilterChange}
           />
         </span>
-        <input
-          className={styles.searchBox}
-          type="search"
-          onChange={handleSearchboxChange}
-          placeholder="Search ingredient..."
-        />
+        <span className={styles.dateFilterContainer}>
+          <label htmlFor="dateFilter">Ingredient</label>
+          <input
+            className={styles.searchBox}
+            type="text"
+            onChange={handleSearchboxChange}
+            placeholder="Search..."
+          />
+        </span>
       </div>
       {/* <span className={styles.nameFilterContainer}>
         <label htmlFor="nameFilter">Name Filter</label>
