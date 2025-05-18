@@ -47,13 +47,13 @@ export default function RecipeCollectionPage() {
 
   return (
     <div className={styles.pageWrapper}>
-      <button
-        className="actionButton"
-        onClick={() => router.push('/recipe/selectIngredients')}
-      >
-        Generate Recipe
-      </button>
-      <span>
+      <div className={styles.controlRow}>
+        <button
+          className="actionButton"
+          onClick={() => router.push('/recipe/selectIngredients')}
+        >
+          Generate New Recipe
+        </button>
         <label htmlFor="titleFilter">Search</label>
         <input
           name="titleFilter"
@@ -61,16 +61,14 @@ export default function RecipeCollectionPage() {
           placeholder="Search recipe..."
           onChange={handleTitleFilterChange}
         />
-      </span>
-      <span>
         <label htmlFor="difficultyFilter">Difficulty</label>
         <select name="difficultyFilter" onChange={handleDifficultyFilterChange}>
-          <option value=""></option>
+          <option value="">Select...</option>
           <option value="easy">easy</option>
           <option value="medium">medium</option>
           <option value="hard">hard</option>
         </select>
-      </span>
+      </div>
       {loading ? (
         <p>Loading recipes...</p>
       ) : recipes.length === 0 ? (

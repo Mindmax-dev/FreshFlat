@@ -5,6 +5,14 @@
   padding: 2rem;
 }
 
+.controlRow {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
 .recipeTable {
   width: 80%;
   max-width: 800px;
