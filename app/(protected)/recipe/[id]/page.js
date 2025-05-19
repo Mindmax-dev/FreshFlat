@@ -45,14 +45,18 @@ export default function RecipeDisplay({ params }) {
         <p className={styles.cookingTime}>
           Cooking time: {recipe.cooking_time} mins
         </p>
+        <p className={styles.difficulty}>Difficulty: {recipe.difficulty}</p>
       </span>
-      <p className={styles.difficulty}>Difficulty: {recipe.difficulty}</p>
       <span className={styles.lineBreak}></span>
       <ul className={styles.innerBlock}>
         <h2 className={styles.innerBlockTitle}>Ingredients</h2>
         {recipe.recipes_have_ingredients.map((ingredient) => (
           <li className={styles.innerBlockLine} key={ingredient.ingredient}>
-            {ingredient.amount + ingredient.unit + ' ' + ingredient.ingredient}
+            {ingredient.amount +
+              ' ' +
+              ingredient.unit +
+              ' ' +
+              ingredient.ingredient}
           </li>
         ))}
       </ul>

@@ -112,8 +112,7 @@ export async function getAllRecipesOfFlatWithFilters(
   orderIsAscending,
   titleIncludes,
   cookingTimeIsAscending,
-  preparation_time,
-  difficulty
+  preparation_time
 ) {
   const supabase = await createClient();
 
@@ -125,8 +124,7 @@ export async function getAllRecipesOfFlatWithFilters(
     .order('cooking_time', { ascending: cookingTimeIsAscending })
     .order('preparation_time', {
       ascending: preparation_time,
-    })
-    .eq('difficulty', difficulty);
+    });
 
   if (error) {
     console.error('Error fetching recipes:', error);
@@ -140,7 +138,8 @@ export async function saveRecipeToDatabase(
   instructions,
   preparation_time,
   cooking_time,
-  ingredients
+  ingredients,
+  difficulty
 ) {
   const supabase = await createClient();
 
@@ -165,6 +164,7 @@ export async function saveRecipeToDatabase(
         cooking_time: cooking_time,
         created_by: userId,
         flat: flatOfUser.data[0].flat,
+        difficulty: difficulty,
       },
     ])
     .select();

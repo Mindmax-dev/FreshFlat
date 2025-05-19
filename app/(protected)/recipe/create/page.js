@@ -72,7 +72,7 @@ function RecipeFetcher() {
             >
               Discard Recipe
             </button>
-            <RecipeSaveButton recipeJson={recipeJson} />
+            <RecipeSaveButton recipeJson={recipeJson} difficulty={difficulty} />
           </div>
         </>
       ) : (

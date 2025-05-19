@@ -13,11 +13,18 @@ export default function Header() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'Pantry', path: '/' },
-    { name: 'Recipes', path: '/recipe/collection' },
-    { name: 'Account', path: '/account' },
-    { name: 'Flat', path: '/flat' },
+    { name: 'Pantry', path: '/', initialRoute: '/' },
+    { name: 'Recipes', path: '/recipe', initialRoute: '/recipe/collection' },
+    { name: 'Account', path: '/account', initialRoute: '/account' },
+    { name: 'Flat', path: '/flat', initialRoute: '/flat' },
   ];
+
+  // Helper to get the first segment after "/"
+  const getFirstSegment = (path) => {
+    if (path === '/') return '/';
+    const segments = path.split('/').filter(Boolean);
+    return segments.length > 0 ? `/${segments[0]}` : '/';
+  };
 
   return (
     <header className={styles.header}>
@@ -33,17 +40,23 @@ export default function Header() {
         {isOpen ? <X /> : <Menu />}
       </div>
       <nav className={`${styles.navButtons} ${isOpen ? styles.open : ''}`}>
-        {navItems.map((item) => (
-          <button
-            key={item.path}
-            className={`${styles.navButton} ${
-              pathname === item.path ? styles.navButtonActive : ''
-            }`}
-            onClick={() => router.push(item.path)}
-          >
-            {item.name}
-          </button>
-        ))}
+        {navItems.map((item) => {
+          const isRoot = item.path === '/';
+          const active = isRoot
+            ? pathname === '/'
+            : getFirstSegment(pathname) === item.path;
+          return (
+            <button
+              key={item.path}
+              className={`${styles.navButton} ${
+                active ? styles.navButtonActive : ''
+              }`}
+              onClick={() => router.push(item.initialRoute)}
+            >
+              {item.name}
+            </button>
+          );
+        })}
       </nav>
     </header>
   );

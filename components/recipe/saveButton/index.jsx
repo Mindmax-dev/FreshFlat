@@ -1,14 +1,17 @@
 'use client';
 import { useRouter } from 'next/navigation';
 
-export default function RecipeSaveButton({ recipeJson }) {
+export default function RecipeSaveButton({ recipeJson, difficulty }) {
   const router = useRouter();
 
   const handleSaveRecipe = async () => {
-    const response = fetch('/api/recipe', {
+    fetch('/api/recipe', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(recipeJson),
+      body: JSON.stringify({
+        recipeJson: recipeJson,
+        difficulty: difficulty,
+      }),
     });
 
     router.push('/recipe/collection');

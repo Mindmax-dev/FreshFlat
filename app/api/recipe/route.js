@@ -5,14 +5,13 @@ import {
 } from '@/model/recipe';
 import { NextResponse } from 'next/server';
 
-export async function GET(request) {
+export async function GET() {
   // Returns all recipes from the database
   const recipes = await getAllRecipesOfFlatWithFilters(
     true,
     '',
     true,
     true,
-    'easy'
   );
 
   return NextResponse.json(recipes, { status: 200 });
@@ -30,11 +29,12 @@ export async function PUT(request) {
   const body = await request.json();
 
   await saveRecipeToDatabase(
-    body.title,
-    body.instructions,
-    body.preparation_time,
-    body.cooking_time,
-    body.ingredients
+    body.recipeJson.title,
+    body.recipeJson.instructions,
+    body.recipeJson.preparation_time,
+    body.recipeJson.cooking_time,
+    body.recipeJson.ingredients,
+    body.difficulty
   );
 
   return NextResponse.json({}, { status: 200 });

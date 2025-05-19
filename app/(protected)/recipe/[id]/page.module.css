@@ -1,13 +1,14 @@
 .container {
+  color: #000;
   display: flex;
   flex-direction: column;
   align-items: center;
   border: 2px solid black;
   border-radius: 0.5rem;
-  width: 55%;
+  width: 75%;
   margin: 2rem auto 1rem auto;
   padding: 1rem 2rem;
-  background-color: rgb(100, 100, 100);
+  background-color: whitesmoke;
 }
 
 .recipeTitle {
@@ -22,15 +23,13 @@
   align-items: center;
   justify-content: center;
   gap: 8rem;
-}
-
-.difficulty {
-  margin-bottom: 3rem;
+  margin-bottom: 15px;
 }
 
 .subTitleContainer .preparationTime,
-.cookingTime {
-  width: 50%;
+.cookingTime,
+.difficulty {
+  width: 33%;
 }
 
 .preparationTime {
@@ -39,7 +38,6 @@
 
 .innerBlockTitle {
   margin: 0 0 1rem 2rem;
-  text-decoration: underline;
 }
 
 .innerBlock {
@@ -56,12 +54,4 @@
   border: 1px solid rgba(0, 0, 0, 0.5);
   width: 100%;
   margin-bottom: 1rem;
-}
-
-.recipeTitle,
-.innerBlockTitle,
-.innerBlockLine,
-.preparationTime,
-.cookingTime {
-  text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
 }
